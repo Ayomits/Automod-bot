@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@automod/bot",
+  "description": "Discord.js implementation",
+  "version": "1.0.0",
+  "main": "./dist/main.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "pnpm@10.12.1",
+  "scripts": {
+    "format:fix": "npx prettier --write \"src/**/*.ts\"",
+    "format:check": "npx prettier --check \"src/**/*.ts\"",
+    "lint:check": "npx eslint src --ext .ts",
+    "lint:fix": "npx eslint src --ext .ts --fix",
+    "build": "tsup",
+    "pipeline": "pnpm run format:fix && pnpm run lint:fix && pnpm run build",
+    "dev": "npx nodemon",
+    "prod": "node dist/main.js"
+  },
+  "repository": {
+    "url": "https://github.com/Ayomits/ts-fetch"
+  },
+  "dependencies": {
+    "discord.js": "^14.21.0",
+    "dotenv": "^17.2.0",
+    "ts-fetcher": "^1.3.0"
+  },
+  "devDependencies": {
+    "@automod/types": "workspace:^",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.30.1",
+    "@ts-fetcher/types": "^1.4.0",
+    "@types/node": "^24.0.12",
+    "@typescript-eslint/eslint-plugin": "^8.36.0",
+    "@typescript-eslint/parser": "^8.36.0",
+    "esbuild-plugin-version-injector": "^1.2.1",
+    "eslint": "^9.30.1",
+    "globals": "^16.3.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "Ayomits"
+}
