@@ -1,4 +1,18 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, ConfigDict
 
-class AutomodSchema(BaseModel):
-    test: str
+class AutomodMessage(BaseModel):
+    content: str
+    user_id: str
+
+class AutomodRequestSchema(BaseModel):
+    messages: list[AutomodMessage]
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+class AutomodMatch(BaseModel):
+    user_id: str
+    content: str
+    rules: list[str] = Field(default=[])
+
+class AutomodResponseSchema(BaseModel):
+    matches: list[AutomodMatch] = Field(default=[])

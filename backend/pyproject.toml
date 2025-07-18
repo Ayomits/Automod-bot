@@ -7,12 +7,15 @@ authors = [
 ]
 license = {text = "ISK"}
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12,<3.13"
 dependencies = [
     "fastapi (>=0.116.1,<0.117.0)",
     "uvicorn (>=0.35.0,<0.36.0)",
     "python-dotenv (>=1.1.1,<2.0.0)",
     "pydantic (>=2.11.7,<3.0.0)",
+    "transformers (>=4.53.2,<5.0.0)",
+    "sentencepiece (>=0.2.0,<0.3.0)",
+    "detoxify (>=0.5.2,<0.6.0)",
 ]
 
 [tool.poetry]

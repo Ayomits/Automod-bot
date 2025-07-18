@@ -1,0 +1,11 @@
+from enum import Enum
+
+class AutomodRules(Enum):
+    CAPS = "CAPS"
+    CAPS_MIXED = "CAPS_MIXED"
+    MESSAGE_MAX_LENGTH = "MESSAGE_MAX_LENGTH"
+    EMOJI_MAX_LENGTH = "EMOJI_MAX_LENGTH"
+    LINKS = "LINKS"
+    LANGUAGE = "LANGUAGE"
+    BANWORD = "BANWORD"
+    TOXICITY = "TOXICITY"

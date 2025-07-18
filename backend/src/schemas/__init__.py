@@ -1,5 +1,8 @@
-from .automod import AutomodSchema
+from .automod import AutomodRequestSchema, AutomodResponseSchema, AutomodMatch, AutomodMessage
 
 __all__ = (
-    "AutomodSchema"
+    "AutomodRequestSchema",
+    "AutomodResponseSchema",
+    "AutomodMatch",
+    "AutomodMessage"
 )

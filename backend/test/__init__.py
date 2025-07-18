@@ -1,7 +1,6 @@
-from .capslock import test_full_capslock, test_part_capslock, test_trigger_capslock
+from .test_capslock_alghoritm import test_full_caps, test_mixed_caps
 
-__all__ =(
-    "test_full_capslock",
-    "test_part_capslock",
-    "test_trigger_capslock"
+__all__ = (
+    "test_full_caps",
+    "test_mixed_caps"
 )

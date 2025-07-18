@@ -1,11 +1,17 @@
-from fastapi import APIRouter
-from schemas import AutomodSchema
-from automod import CapsLock, CapsLockType
+from fastapi import APIRouter, Body
+from schemas import AutomodRequestSchema, AutomodResponseSchema, AutomodMessage
+from automod import Automod
 
 automod_router = APIRouter(prefix='/automod')
 
-instance = CapsLock()
+instance = Automod()
 
-@automod_router.post("/")
-async def automod_classic(item: AutomodSchema):
-    return instance.moderate(item.test, CapsLockType.Mixed)
+@automod_router.post("/", response_model=AutomodResponseSchema, name="Run moderation pipeline", tags=["automod"])
+async def automod_classic(item: AutomodRequestSchema = Body(
+    examples={
+        "default": AutomodRequestSchema(messages=[
+            AutomodMessage(content="HELLO WORLD", user_id="snowflake")
+        ])
+    }
+)):
+    return instance.pipeline(item)
