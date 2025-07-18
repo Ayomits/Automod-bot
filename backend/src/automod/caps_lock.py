@@ -26,8 +26,7 @@ class CapsLock:
         self.__options = options
 
     def analyze(self, content: str, type: CapsLockType = CapsLockType.Default.value) -> bool:
-        words = content.split()
-        raw_text_length = len("".join(words))
+        raw_text_length = len("".join(content.split()))
         all_caps_symbols = self.__get_all_caps_symbols(word=content)
         all_symbols = self.__get_all_symbols(word=content)
         all_caps_length = len("".join(all_caps_symbols))
@@ -39,9 +38,9 @@ class CapsLock:
             return caps_percent >= self.__options.default_trigger_percentage
         """Проверка на сЛоЖнЫй кАпС"""
         if type == CapsLockType.Mixed.value:
-            mapped_words = [self.__filter_mixed_words(i, word, words) for i, word in enumerate(words)]
+            mapped_words = [self.__filter_mixed_words(i, word, all_symbols) for i, word in enumerate(all_symbols)]
             filtred_words = list(filter(lambda w: w.is_potential, mapped_words))
-            percantage = round(len(filtred_words) / len(words) * 100)
+            percantage = round(len(filtred_words) / len(all_symbols) * 100)
             return percantage >= self.__options.mixed_words_trigger_percentage
 
     def __get_all_symbols(self, word: str):
