@@ -6,16 +6,16 @@ from routers import automod_router
 
 load_dotenv()
 
+APP_ENV = config_service.get("APP_ENV")
+
 app = FastAPI(
   title="Automod API",
   description="An API for automod bot",
   root_path='/api',
-  debug=True,
+  debug=APP_ENV == "debug",
 )
-
-APP_ENV = config_service.get("APP_ENV")
 
 app.include_router(automod_router)
 
 if __name__ == "__main__":
-    run(app="main:app", port=8080, reload=APP_ENV == "dev")
+    run(app="main:app", port=8080, reload=APP_ENV == "dev" or APP_ENV == "debug")
