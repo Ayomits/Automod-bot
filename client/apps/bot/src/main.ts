@@ -1,9 +1,13 @@
-import { Client } from "discordx";
+import "reflect-metadata";
+import { Client, DIService, tsyringeDependencyRegistryEngine } from "discordx";
 import { importx, dirname } from "@discordx/importer";
 import { configService } from "./shared/config/config.js";
 import { GatewayIntentBits, Interaction, Message } from "discord.js";
+import { container } from "tsyringe";
 
 async function bootstrap() {
+  DIService.engine = tsyringeDependencyRegistryEngine
+    .setInjector(container);
   const client = new Client({
     intents: [
       GatewayIntentBits.MessageContent,
@@ -11,10 +15,10 @@ async function bootstrap() {
       GatewayIntentBits.Guilds,
       GatewayIntentBits.GuildMessages,
     ],
-
     simpleCommand: {
       prefix: "!",
     },
+    silent: configService.get("APP_ENV") !== "dev",
   });
 
   client.once("ready", async () => {

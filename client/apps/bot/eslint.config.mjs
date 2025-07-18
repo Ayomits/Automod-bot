@@ -1,11 +1,11 @@
-import globals from 'globals';
-import tsParser from '@typescript-eslint/parser';
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
-import js from '@eslint/js';
-import { defineConfig } from 'eslint/config';
-import { FlatCompat } from '@eslint/eslintrc';
-import { fileURLToPath } from 'node:url';
-import path from 'node:path';
+import globals from "globals";
+import tsParser from "@typescript-eslint/parser";
+import typescriptEslint from "@typescript-eslint/eslint-plugin";
+import js from "@eslint/js";
+import { defineConfig } from "eslint/config";
+import { FlatCompat } from "@eslint/eslintrc";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -22,16 +22,26 @@ export default defineConfig([
         ...globals.node,
       },
       parser: tsParser,
-      ecmaVersion: 'latest',
-      sourceType: 'module',
+      ecmaVersion: "latest",
+      sourceType: "module",
       parserOptions: {},
     },
-    extends: compat.extends('eslint:recommended', 'plugin:@typescript-eslint/recommended'),
+    extends: compat.extends(
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ),
     plugins: {
-      '@typescript-eslint': typescriptEslint,
+      "@typescript-eslint": typescriptEslint,
     },
     rules: {
-      semi: 'error',
+      semi: "error",
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        {
+          prefer: "type-imports",
+          fixStyle: "separate-type-imports",
+        },
+      ],
     },
   },
 ]);

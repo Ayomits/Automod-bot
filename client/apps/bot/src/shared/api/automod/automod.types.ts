@@ -1,5 +1,5 @@
-import { Snowflake } from "discord.js";
-import { LiteralEnum } from "ts-fetcher";
+import type { Snowflake } from "discord.js";
+import type { LiteralEnum } from "ts-fetcher";
 
 export interface AutomodMessage {
   content: string;

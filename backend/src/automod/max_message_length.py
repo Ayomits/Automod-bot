@@ -8,7 +8,7 @@ class MaxMessageTrigger(BaseModel):
     sliced: str
     matched: bool
 
-default_options = MaxMessageLengthOptions(max_message_length=256)
+default_options = MaxMessageLengthOptions(max_message_length=20)
 
 class MaxMessageLength:
     __options: MaxMessageLengthOptions
