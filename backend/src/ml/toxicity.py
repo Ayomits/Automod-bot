@@ -1,25 +1,20 @@
-from torch import no_grad, sigmoid, cuda
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from torch import no_grad, sigmoid
+from transformers import BertTokenizer, BertForSequenceClassification
 
-class ToxicityML:
+class RussianToxicityML:
     __tokenizer = None
     __model = None
 
     def __init__(self):
-        model_checkpoint = 'cointegrated/rubert-tiny-toxicity'
-        self.__tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
-        self.__model = AutoModelForSequenceClassification.from_pretrained(model_checkpoint)
-        if cuda.is_available():
-            self.__model.cuda()
+        model_checkpoint = 's-nlp/russian_toxicity_classifier'
+        self.__tokenizer = BertTokenizer.from_pretrained(model_checkpoint)
+        self.__model = BertForSequenceClassification.from_pretrained(model_checkpoint)
 
-    def predict_toxicity(self, text: str, aggregate=True):
+    def predict_toxicity(self, text: str) -> float:
+        batch = self.__tokenizer.encode(text, return_tensors='pt')
         with no_grad():
-            inputs = self.__tokenizer(text, return_tensors='pt', truncation=True, padding=True).to(self.__model.device)
-            proba = sigmoid(self.__model(**inputs).logits).cpu().numpy()
-        if isinstance(text, str):
-            proba = proba[0]
-        if aggregate:
-            return 1 - proba.T[0] * (1 - proba.T[-1])
-        return proba
+            logits = self.__model(batch).logits
+            proba = sigmoid(logits).cpu().numpy()[0][0]
+        return float(proba)
 
-toxicity_ml = ToxicityML()
+toxicity_ml = RussianToxicityML()

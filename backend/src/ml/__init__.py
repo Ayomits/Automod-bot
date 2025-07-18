@@ -1,6 +1,6 @@
-from .toxicity import ToxicityML, toxicity_ml
+from .toxicity import RussianToxicityML, toxicity_ml
 
 __all__ = (
-    "ToxicityML",
+    "RussianToxicityML",
     "toxicity_ml"
 )

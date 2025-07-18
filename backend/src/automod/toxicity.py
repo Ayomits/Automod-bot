@@ -3,6 +3,5 @@ from ml import toxicity_ml
 class Toxicity:
   def analyze(self, content: str):
     ml_analyze = toxicity_ml.predict_toxicity(text=content)
-    if ml_analyze <= 0.6:
-      return False
-    return True
+    print(ml_analyze, content)
+    return ml_analyze <= 0.034
