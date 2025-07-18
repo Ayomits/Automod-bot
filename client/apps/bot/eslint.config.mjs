@@ -32,7 +32,6 @@ export default defineConfig([
     },
     rules: {
       semi: 'error',
-      'no-console': 'error',
     },
   },
 ]);

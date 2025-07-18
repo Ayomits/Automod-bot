@@ -1,6 +1,7 @@
 from regex import findall
 from pydantic import BaseModel, NonNegativeInt
 from enum import Enum
+from ml import toxicity_ml
 
 class CapsLockOptions(BaseModel):
     """Для обычного капс лока"""
@@ -23,19 +24,22 @@ class CapsLock:
     __options: CapsLockOptions
 
     def __init__(self, options: CapsLockOptions = default_options):
-        self.__options = options
+        self.__options=default_options.copy(update=options.dict())
 
     def analyze(self, content: str, type: CapsLockType = CapsLockType.Default.value) -> bool:
-        raw_text_length = len("".join(content.split()))
         all_caps_symbols = self.__get_all_caps_symbols(word=content)
         all_symbols = self.__get_all_symbols(word=content)
+
         all_caps_length = len("".join(all_caps_symbols))
         all_symbols_length = len("".join(all_symbols))
+
         caps_percent = round(all_caps_length / all_symbols_length * 100)
+
+        is_potential_abbreviation = caps_percent == 100 and len(all_caps_symbols) <= 5 and len(all_symbols) <= 1
 
         """Проверка дефолтного правила капса"""
         if type == CapsLockType.Default.value:
-            return caps_percent >= self.__options.default_trigger_percentage
+            return caps_percent >= self.__options.default_trigger_percentage and not is_potential_abbreviation
         """Проверка на сЛоЖнЫй кАпС"""
         if type == CapsLockType.Mixed.value:
             mapped_words = [self.__filter_mixed_words(i, word, all_symbols) for i, word in enumerate(all_symbols)]

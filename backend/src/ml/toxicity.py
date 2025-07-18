@@ -12,7 +12,6 @@ class ToxicityML:
         if cuda.is_available():
             self.__model.cuda()
 
-
     def predict_toxicity(self, text: str, aggregate=True):
         with no_grad():
             inputs = self.__tokenizer(text, return_tensors='pt', truncation=True, padding=True).to(self.__model.device)

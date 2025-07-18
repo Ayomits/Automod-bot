@@ -1,5 +1,7 @@
-from . import CapsLock, CapsLockType
+from .caps_lock import CapsLock, CapsLockType
+from .max_message_length import MaxMessageLength
 from .rules import AutomodRules
+from .toxicity import Toxicity
 from pydantic import BaseModel
 from schemas import AutomodRequestSchema, AutomodResponseSchema, AutomodMatch, AutomodMessage
 
@@ -10,15 +12,19 @@ class AutomodRule(BaseModel):
 class Automod:
 
     __capslock = CapsLock()
+    __max_message_length = MaxMessageLength()
+    __toxicity_analyzer = Toxicity()
+
     __automod_rules = [rule.value for rule in AutomodRules]
 
     def pipeline(self, schema: AutomodRequestSchema) -> AutomodResponseSchema:
         messages = schema.messages
         matches = []
+        rules_to_check = schema.rules if len(schema.rules) >= 1 else self.__automod_rules
         for message in messages:
             if message.content:
                 rules = []
-                for rule in self.__automod_rules:
+                for rule in rules_to_check:
                     runned = self.run_rule(rule=rule, message=message)
                     if runned:
                         rules.append(rule)
@@ -31,6 +37,10 @@ class Automod:
             return self.process_rule(func=self.__run_full_caps_rule, content=message.content, rule=rule)
         elif rule == AutomodRules.CAPS_MIXED.value:
             return self.process_rule(func=self.__run_mixed_caps_rule, content=message.content, rule=rule)
+        elif rule == AutomodRules.MESSAGE_MAX_LENGTH.value:
+            return self.process_rule(func=self.__run_max_message_length_rule, content=message.content, rule=rule)
+        elif rule == AutomodRules.TOXICITY.value:
+            return self.process_rule(func=self.__run_toxicity_rule, content=message.content, rule=rule)
         else:
             return False
 
@@ -43,3 +53,9 @@ class Automod:
 
     def __run_mixed_caps_rule(self, content: str):
         return self.__capslock.analyze(content=content, type=CapsLockType.Mixed.value)
+
+    def __run_max_message_length_rule(self, content: str):
+        return self.__max_message_length.analyze(content=content)
+
+    def __run_toxicity_rule(self, content: str):
+        return self.__toxicity_analyzer.analyze(content=content)

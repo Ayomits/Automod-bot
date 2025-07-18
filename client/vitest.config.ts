@@ -10,27 +10,7 @@ export default defineConfig({
       enabled: true,
       tsconfig: "./tsconfig.test.json",
     },
-    alias: [
-      {
-        find: "@ts-fetcher/cache",
-        replacement: path.resolve(__dirname, "./packages/cache/dist/index.js"),
-      },
-      {
-        find: "@ts-fetcher/rest",
-        replacement: path.resolve(__dirname, "./packages/rest/dist/index.js"),
-      },
-      {
-        find: "@ts-fetcher/types",
-        replacement: path.resolve(__dirname, "./packages/types/dist/index.js"),
-      },
-      {
-        find: "ts-fetcher",
-        replacement: path.resolve(
-          __dirname,
-          "./packages/ts-fetcher/dist/index.js"
-        ),
-      },
-    ],
+    alias: [],
     coverage: {
       enabled: true,
       all: true,

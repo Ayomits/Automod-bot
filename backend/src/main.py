@@ -9,7 +9,8 @@ load_dotenv()
 app = FastAPI(
   title="Automod API",
   description="An API for automod bot",
-  root_path='/api'
+  root_path='/api',
+  debug=True,
 )
 
 APP_ENV = config_service.get("APP_ENV")
