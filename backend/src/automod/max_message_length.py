@@ -1,14 +1,16 @@
 from pydantic import BaseModel
+from regex import findall
 
 class MaxMessageLengthOptions(BaseModel):
     max_message_length: int
+    max_word_length: int
 
 class MaxMessageTrigger(BaseModel):
     raw: str
     sliced: str
     matched: bool
 
-default_options = MaxMessageLengthOptions(max_message_length=20)
+default_options = MaxMessageLengthOptions(max_message_length=256, max_word_length=32)
 
 class MaxMessageLength:
     __options: MaxMessageLengthOptions
@@ -18,9 +20,14 @@ class MaxMessageLength:
 
     def analyze(self, content: str, return_raw = False):
         sliced_message = content[slice(0, self.__options.max_message_length)]
-        is_matched = len(content) > self.__options.max_message_length
-        if is_matched:
+        ## TODO: move to service
+        splited_message = findall(r'[A-ZЁА-Яa-zёа-я]', content)
+        is_max_message_matched = len(content) > self.__options.max_message_length
+        if is_max_message_matched:
             if return_raw:
                 return MaxMessageTrigger(raw=content, sliced=sliced_message, matched=True)
             return True
-        return False if not return_raw else MaxMessageTrigger(raw=content, sliced=content, matched=False)
+        for word in splited_message:
+            if len(word) > self.__options.max_word_length:
+                return True
+        return False

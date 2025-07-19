@@ -1,7 +1,6 @@
 from regex import findall
 from pydantic import BaseModel, NonNegativeInt
 from enum import Enum
-from ml import toxicity_ml
 
 class CapsLockOptions(BaseModel):
     """Для обычного капс лока"""
