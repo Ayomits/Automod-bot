@@ -1,0 +1,15 @@
+import type { GuardFunction, ArgsOf } from "discordx";
+
+export const isComponentInteractionAuthor: GuardFunction<
+  ArgsOf<"interactionCreate">
+> = async ([interaction], _client, next) => {
+  const message = "message" in interaction ? interaction.message : null;
+  if (!message) {
+    return;
+  }
+
+  if (message.author.id === interaction.user.id) {
+    return next();
+  }
+  return false;
+};

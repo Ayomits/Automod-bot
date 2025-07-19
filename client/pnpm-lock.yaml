@@ -45,6 +45,9 @@ importers:
       '@discordx/importer':
         specifier: ^1.3.3
         version: 1.3.3
+      '@discordx/utilities':
+        specifier: ^7.0.5
+        version: 7.0.5(discord.js@14.21.0)(discordx@11.12.5(discord.js@14.21.0))
       '@ts-fetcher/cache':
         specifier: ^1.3.1
         version: 1.3.1
@@ -280,6 +283,13 @@ packages:
   '@discordx/internal@1.1.5':
     resolution: {integrity: sha512-Wpr1bh9GpTud7+fRlHUSihf2zrFzXgSC+8OCvwzODSH794mwWhKRYjGQKMgk3xfOmqiP8FTzs0/5GfYSbCOQ0Q==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
+
+  '@discordx/utilities@7.0.5':
+    resolution: {integrity: sha512-YsWpuruGyCXWKWDYlM6xBxUkXILDPSc4I9zLtg0b5sNTe+wu9tzVIF5bG62e3KjjRvLuNFss4cNkjxO5YcorLA==}
+    engines: {node: '>=16.0.0', npm: '>=7.0.0'}
+    peerDependencies:
+      discord.js: '>=14 || ^14.0.0-dev'
+      discordx: '*'
 
   '@esbuild/aix-ppc64@0.25.6':
     resolution: {integrity: sha512-ShbM/3XxwuxjFiuVBHA+d3j5dyac0aEVVq1oluIDf71hUw0aRF59dV/efUsIwFnR6m8JNM2FjZOzmaZ8yG61kw==}
@@ -925,6 +935,9 @@ packages:
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
+
+  dayjs@1.11.13:
+    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
   debug@4.4.1:
     resolution: {integrity: sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==}
@@ -2097,6 +2110,12 @@ snapshots:
 
   '@discordx/internal@1.1.5': {}
 
+  '@discordx/utilities@7.0.5(discord.js@14.21.0)(discordx@11.12.5(discord.js@14.21.0))':
+    dependencies:
+      dayjs: 1.11.13
+      discord.js: 14.21.0
+      discordx: 11.12.5(discord.js@14.21.0)
+
   '@esbuild/aix-ppc64@0.25.6':
     optional: true
 
@@ -2676,6 +2695,8 @@ snapshots:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  dayjs@1.11.13: {}
 
   debug@4.4.1(supports-color@5.5.0):
     dependencies:

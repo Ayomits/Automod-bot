@@ -56,3 +56,19 @@ export const AutomodLogMessages = {
     ],
   },
 } as const;
+
+export const AutomodAnalyzeMessages = {
+  rules: {
+    title: "Выбор правил",
+    description: [
+      "Выберите нужные правила с использованием селект меню ниже",
+      "Чем больше правил вы выберите, тем дольше будет анализ",
+    ].join("\n"),
+  },
+  users: {
+    title: "Выбор пользователей",
+    text: [
+      "Выбор пользователей может быть полезен при выяснении наличия конфликта",
+    ],
+  },
+} as const;

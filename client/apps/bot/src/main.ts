@@ -2,12 +2,12 @@ import "reflect-metadata";
 import { Client, DIService, tsyringeDependencyRegistryEngine } from "discordx";
 import { importx, dirname } from "@discordx/importer";
 import { configService } from "./shared/config/config.js";
-import { GatewayIntentBits, Interaction, Message } from "discord.js";
+import type { Interaction, Message } from "discord.js";
+import { GatewayIntentBits } from "discord.js";
 import { container } from "tsyringe";
 
 async function bootstrap() {
-  DIService.engine = tsyringeDependencyRegistryEngine
-    .setInjector(container);
+  DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
   const client = new Client({
     intents: [
       GatewayIntentBits.MessageContent,
@@ -22,7 +22,17 @@ async function bootstrap() {
   });
 
   client.once("ready", async () => {
-    await client.initApplicationCommands();
+    async function initCommands(__retries = 0) {
+      if (__retries < 3) {
+        try {
+          await client.initApplicationCommands();
+        } catch {
+          await client.clearApplicationCommands();
+          await initCommands(__retries + 1);
+        }
+      }
+    }
+    await initCommands();
   });
 
   client.on("interactionCreate", (interaction: Interaction) => {
