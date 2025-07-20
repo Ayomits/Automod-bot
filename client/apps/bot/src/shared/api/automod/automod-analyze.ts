@@ -52,6 +52,8 @@ export class AutomodAnalyzeExplanaition {
     return this.text;
   }
 
+  public toEmbeds() {}
+
   public toArrText() {
     if (this.arrText.length) {
       return this.arrText;

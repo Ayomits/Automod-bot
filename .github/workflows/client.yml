@@ -1,0 +1,36 @@
+name: Client CI
+
+on:
+  push:
+    paths:
+      - client/**
+
+jobs:
+  build_lint_format:
+    runs-on: ubuntu-latest
+    name: Build, lint and format
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.12.1
+
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check prettier
+        run: pnpm run format:check
+
+      - name: Check lint
+        run: pnpm run lint:check
+
+      - name: Run build
+        run: pnpm run build

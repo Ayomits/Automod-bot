@@ -15,11 +15,9 @@ import { AutomodLogMessages } from "../automod.messages.js";
 
 @injectable()
 export class AutomodLogService {
-  public execute(response: AutomodResponse, channel: SendableChannels, guild: Guild) {
-    const resolvedMatches = this.resolveMatches(
-      guild,
-      response.matches
-    );
+  public async execute(response: AutomodResponse, guild: Guild) {
+    const resolvedMatches = this.resolveMatches(guild, response.matches);
+    const channel = await this.getLogChannel(guild);
     resolvedMatches.forEach((resolved, idx) => {
       setTimeout(() => {
         this.sendLogs(channel, {
@@ -64,6 +62,16 @@ export class AutomodLogService {
       });
     });
     return embeds;
+  }
+
+  private async getLogChannel(guild: Guild) {
+    const channel = await guild.channels.fetch("1391117549952958596", {
+      cache: true,
+    });
+    if (!channel) {
+      throw new Error("Log channel does not exists");
+    }
+    return channel as SendableChannels;
   }
 
   private getLogMessagesByType(type: keyof typeof AutomodLogMessages) {

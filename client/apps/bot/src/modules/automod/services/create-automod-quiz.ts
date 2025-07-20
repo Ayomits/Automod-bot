@@ -1,4 +1,4 @@
-import type { LiteralEnum } from "ts-fetcher";
+import type { LiteralEnum } from "@ts-fetcher/types";
 
 export const AnalyzeStep = {
   Rules: "rules",

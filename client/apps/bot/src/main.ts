@@ -36,11 +36,19 @@ async function bootstrap() {
   });
 
   client.on("interactionCreate", (interaction: Interaction) => {
-    void client.executeInteraction(interaction);
+    try {
+      void client.executeInteraction(interaction);
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   client.on("messageCreate", (message: Message) => {
-    void client.executeCommand(message);
+    try {
+      void client.executeCommand(message);
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   await importx(`${dirname(import.meta.url)}/modules/**/*.{ts,js}`);

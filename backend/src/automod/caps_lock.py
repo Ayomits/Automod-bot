@@ -1,6 +1,7 @@
 from regex import findall
 from pydantic import BaseModel, NonNegativeInt
 from enum import Enum
+from .regex import MessageCleanUp
 
 class CapsLockOptions(BaseModel):
     """Для обычного капс лока"""
@@ -26,11 +27,11 @@ class CapsLock:
         self.__options=default_options.copy(update=options.dict())
 
     def analyze(self, content: str, type: CapsLockType = CapsLockType.Default.value) -> bool:
-        all_caps_symbols = self.__get_all_caps_symbols(word=content)
-        all_symbols = self.__get_all_symbols(word=content)
+        all_caps_symbols = MessageCleanUp.caps_symbols(content=content, return_string=True)
+        all_symbols = MessageCleanUp.clean_up(content=content, return_string=True)
 
-        all_caps_length = len("".join(all_caps_symbols))
-        all_symbols_length = len("".join(all_symbols))
+        all_caps_length = len(all_caps_symbols)
+        all_symbols_length = len(all_symbols)
 
         caps_percent = round(all_caps_length / all_symbols_length * 100)
 
@@ -46,17 +47,11 @@ class CapsLock:
             percantage = round(len(filtred_words) / len(all_symbols) * 100)
             return percantage >= self.__options.mixed_words_trigger_percentage
 
-    def __get_all_symbols(self, word: str):
-        return findall(r'[A-ZЁА-Яa-zёа-я]+', word)
-
-    def __get_all_caps_symbols(self, word: str):
-        return findall(r'[А-ЯЁA-Z]+', word)
-
     def __filter_mixed_words(self, i: int, word: str, self_arr: list[str], once = False) -> bool:
-        all_symbols = self.__get_all_symbols(word=word)
-        all_caps_symbols = self.__get_all_caps_symbols(word=word)
-        all_caps_length = len("".join(all_caps_symbols))
-        all_symbols_length = len("".join(all_symbols))
+        all_symbols = MessageCleanUp.clean_up(content=word)
+        all_caps_symbols = MessageCleanUp.caps_symbols(content=word)
+        all_caps_length = len(all_caps_symbols)
+        all_symbols_length = len(all_symbols)
 
         if all_caps_length <= 1:
             return CapslockMatch(word=word, is_potential=False)
