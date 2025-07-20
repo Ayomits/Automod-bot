@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - client/**
+      - .github/workflows/client.yml
 
 jobs:
   build_lint_format:
