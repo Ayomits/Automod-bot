@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { Client, DIService, tsyringeDependencyRegistryEngine } from "discordx";
 import { importx, dirname } from "@discordx/importer";
-import { configService } from "./shared/config/config.js";
+import { configService } from "./config/config.js";
 import type { Interaction, Message } from "discord.js";
 import { GatewayIntentBits } from "discord.js";
 import { container } from "tsyringe";
@@ -20,10 +20,6 @@ async function bootstrap() {
       prefix: "!",
     },
     silent: APP_ENV !== "dev",
-    botGuilds:
-      APP_ENV === "dev"
-        ? ["1265957323193716788", "1391117548036165752"]
-        : undefined,
   });
 
   client.once("ready", async () => {

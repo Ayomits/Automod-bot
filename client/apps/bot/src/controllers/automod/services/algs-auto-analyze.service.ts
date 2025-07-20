@@ -1,4 +1,4 @@
-import { AutomodApi } from "@/shared/api/automod/automod.api.js";
+import { AutomodApi } from "@/api/automod/automod.api.js";
 import type { Message } from "discord.js";
 import { inject, injectable } from "tsyringe";
 import { AutomodLogService } from "./automod-logs.service.js";
@@ -7,7 +7,7 @@ import { AutomodLogService } from "./automod-logs.service.js";
 export class AlgsAutomodService {
   constructor(
     @inject(AutomodApi) private automodApi: AutomodApi,
-    @inject(AutomodLogService) private automodLogService: AutomodLogService,
+    @inject(AutomodLogService) private automodLogService: AutomodLogService
   ) {}
 
   async execute(msg: Message) {

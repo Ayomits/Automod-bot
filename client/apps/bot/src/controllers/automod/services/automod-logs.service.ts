@@ -2,7 +2,7 @@ import type {
   AutomodMatch,
   AutomodResponse,
   AutomodRule,
-} from "@/shared/api/automod/automod.types.js";
+} from "@/api/automod/automod.types.js";
 import type {
   SendableChannels,
   MessagePayload,
@@ -29,7 +29,7 @@ export class AutomodLogService {
 
   private sendLogs(
     channel: SendableChannels,
-    options: MessagePayload | MessageCreateOptions,
+    options: MessagePayload | MessageCreateOptions
   ) {
     try {
       channel.send(options);

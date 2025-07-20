@@ -1,4 +1,4 @@
-import { AutomodAnalyzeExplanaition } from "@/shared/api/automod/automod-analyze.js";
+import { AutomodAnalyzeExplanaition } from "@/api/automod/automod-analyze.js";
 import type {
   CommandInteraction,
   Snowflake,
@@ -8,8 +8,8 @@ import type {
 import { type MessageContextMenuCommandInteraction } from "discord.js";
 import { inject, injectable } from "tsyringe";
 import { ContextCommandAnalyzeMessage } from "../automod.messages.js";
-import { AutomodApi } from "@/shared/api/automod/automod.api.js";
-import type { AutomodMessage } from "@/shared/api/automod/automod.types.js";
+import { AutomodApi } from "@/api/automod/automod.api.js";
+import type { AutomodMessage } from "@/api/automod/automod.types.js";
 import { ApiError } from "@/errors/api.error.js";
 
 @injectable()
@@ -58,7 +58,7 @@ export class AutomodAnalyzeService {
     interaction: CommandInteraction,
     limit: number,
     user: User,
-    channel: TextChannel,
+    channel: TextChannel
   ) {
     channel =
       typeof channel !== "undefined"
@@ -69,7 +69,7 @@ export class AutomodAnalyzeService {
     const apiMessages = await this.collectMessagesToAnalyze(
       channel,
       user.id,
-      limit,
+      limit
     );
 
     const explaination = new AutomodAnalyzeExplanaition();
@@ -82,7 +82,7 @@ export class AutomodAnalyzeService {
   private async collectMessagesToAnalyze(
     channel: TextChannel,
     userId: Snowflake,
-    limit: number,
+    limit: number
   ) {
     const apiMessages: AutomodMessage[] = [];
 

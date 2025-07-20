@@ -1,4 +1,4 @@
-import { configService } from "@/shared/config/config.js";
+import { configService } from "@/config/config.js";
 import { LocalCache } from "@ts-fetcher/cache";
 import type { Rest } from "@ts-fetcher/rest";
 import { createRestInstance } from "@ts-fetcher/rest";
@@ -12,5 +12,5 @@ export const localCacheRest: Rest = createRestInstance(
         "Content-Type": "application/json",
       },
     },
-  },
+  }
 );
