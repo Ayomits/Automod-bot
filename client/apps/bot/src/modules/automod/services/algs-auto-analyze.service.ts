@@ -7,7 +7,7 @@ import { AutomodLogService } from "./automod-logs.service.js";
 export class AlgsAutomodService {
   constructor(
     @inject(AutomodApi) private automodApi: AutomodApi,
-    @inject(AutomodLogService) private automodLogService: AutomodLogService
+    @inject(AutomodLogService) private automodLogService: AutomodLogService,
   ) {}
 
   async execute(msg: Message) {

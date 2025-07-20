@@ -6,7 +6,8 @@ import { AIAutoAnalyzeService } from "../services/ai-auto-analyze.service.js";
 @Discord()
 export class AIAutomodController {
   constructor(
-    @inject(AIAutoAnalyzeService) private aiAutomodService: AIAutoAnalyzeService
+    @inject(AIAutoAnalyzeService)
+    private aiAutomodService: AIAutoAnalyzeService,
   ) {}
 
   @On({ event: "messageCreate" })

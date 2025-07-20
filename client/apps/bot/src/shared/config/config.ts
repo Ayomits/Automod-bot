@@ -1,4 +1,4 @@
-import { ConfigService as ConfigServiceInterface } from "./types.js";
+import type { ConfigService as ConfigServiceInterface } from "./types.js";
 import dt from "dotenv";
 
 export class ConfigService implements ConfigServiceInterface {

@@ -17,7 +17,7 @@ export class AIAutoAnalyzeService {
 
   constructor(
     @inject(AutomodApi) private automodApi: AutomodApi,
-    @inject(AutomodLogService) private automodLogService: AutomodLogService
+    @inject(AutomodLogService) private automodLogService: AutomodLogService,
   ) {
     this.cache = new LocalCache();
     this.timeoutCache = new LocalCache();
@@ -37,7 +37,7 @@ export class AIAutoAnalyzeService {
         createdAt: msg.createdAt,
         user_id: msg.author.id,
       },
-      Infinity
+      Infinity,
     );
     const messageKeys = this.getMessageKeys(channelId);
     if (messageKeys.length === MESSAGE_CACHE_KEYS_LIMIT) {
@@ -88,19 +88,19 @@ export class AIAutoAnalyzeService {
       channelId,
       setTimeout(
         async () => await this.analyzeMessages(channelId, guild),
-        CLEAN_TIMEOUT_DELAY
+        CLEAN_TIMEOUT_DELAY,
       ),
-      CLEAN_TIMEOUT_DELAY
+      CLEAN_TIMEOUT_DELAY,
     );
   }
 
   private getMessageKeys(
     channelId: Snowflake,
-    options?: { returnObject: boolean; removeKeys: boolean }
+    options?: { returnObject: boolean; removeKeys: boolean },
   ) {
     const allEntries = this.cache.getAll().entries();
     const filteredEntries = Array.from(allEntries).filter(([key]) =>
-      key.startsWith(`${channelId}-`)
+      key.startsWith(`${channelId}-`),
     );
 
     if (options?.removeKeys) {
@@ -111,7 +111,7 @@ export class AIAutoAnalyzeService {
 
     if (options?.returnObject) {
       return Object.fromEntries(
-        filteredEntries.map(([key, entry]) => [key, entry.data])
+        filteredEntries.map(([key, entry]) => [key, entry.data]),
       );
     }
     return filteredEntries.map(([key]) => key);

@@ -6,7 +6,7 @@ import { AlgsAutomodService } from "../services/algs-auto-analyze.service.js";
 @singleton()
 export class AlghoritmAutomodController {
   constructor(
-    @inject(AlgsAutomodService) private automodService: AlgsAutomodService
+    @inject(AlgsAutomodService) private automodService: AlgsAutomodService,
   ) {}
 
   @On({ event: "messageCreate" })

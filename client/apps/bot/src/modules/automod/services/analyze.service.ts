@@ -62,9 +62,9 @@ export class AutomodAnalyzeService {
       this.buildModal(
         UsersUtility.getUsername(
           (interaction.targetMember ||
-            interaction.targetUser) as UsersUtilityAccept
-        )
-      )
+            interaction.targetUser) as UsersUtilityAccept,
+        ),
+      ),
     );
   }
 
@@ -101,7 +101,7 @@ export class AutomodAnalyzeService {
         .setCustomId("limit")
         .setLabel("Количество последних сообщений")
         .setStyle(TextInputStyle.Short)
-        .setValue("10")
+        .setValue("10"),
     );
 
     const modal = new ModalBuilder()

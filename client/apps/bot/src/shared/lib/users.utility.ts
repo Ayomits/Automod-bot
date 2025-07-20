@@ -1,6 +1,6 @@
 import type { GuildMember, User } from "discord.js";
 
-export type UsersUtilityAccept = User | GuildMember
+export type UsersUtilityAccept = User | GuildMember;
 
 export class UsersUtility {
   static getAvatar(user: UsersUtilityAccept) {

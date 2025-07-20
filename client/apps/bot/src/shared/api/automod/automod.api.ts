@@ -13,12 +13,12 @@ export class AutomodApi {
 
   public async automod(payload: Omit<AutomodRequest, "rules">) {
     return await this.automodSelectedRules({ ...payload, rules: [] }).catch(
-      console.error
+      console.error,
     );
   }
 
   public async automodAlghorthimicRules(
-    payload: Omit<AutomodRequest, "rules">
+    payload: Omit<AutomodRequest, "rules">,
   ) {
     return await this.automodSelectedRules({
       ...payload,

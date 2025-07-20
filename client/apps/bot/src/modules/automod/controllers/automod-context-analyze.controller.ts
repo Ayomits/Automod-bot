@@ -15,7 +15,7 @@ import { AutomodAnalyzeService } from "../services/analyze.service.js";
 export class AutomodContextAnalyze {
   constructor(
     @inject(AutomodAnalyzeService)
-    private automodAnalyzer: AutomodAnalyzeService
+    private automodAnalyzer: AutomodAnalyzeService,
   ) {}
 
   @ContextMenu({
@@ -28,10 +28,10 @@ export class AutomodContextAnalyze {
       rateValue: 1,
       message(_, timeLeft) {
         return ContextCommandAnalyzeMessage.validation.rate(
-          (timeLeft / 1000).toFixed(1)
+          (timeLeft / 1000).toFixed(1),
         );
       },
-    })
+    }),
   )
   analyzeOneMessage(interaction: MessageContextMenuCommandInteraction) {
     return this.automodAnalyzer.analyzeOneMessage(interaction);
@@ -47,10 +47,10 @@ export class AutomodContextAnalyze {
       rateValue: 1,
       message(_, timeLeft) {
         return ContextCommandAnalyzeMessage.validation.rate(
-          (timeLeft / 1000).toFixed(1)
+          (timeLeft / 1000).toFixed(1),
         );
       },
-    })
+    }),
   )
   analyLastUserMessages(interaction: UserContextMenuCommandInteraction) {
     return this.automodAnalyzer.analyzeUserMessages(interaction);
