@@ -8,6 +8,7 @@ import { container } from "tsyringe";
 
 async function bootstrap() {
   DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
+  const APP_ENV = configService.get("APP_ENV");
   const client = new Client({
     intents: [
       GatewayIntentBits.MessageContent,
@@ -18,7 +19,11 @@ async function bootstrap() {
     simpleCommand: {
       prefix: "!",
     },
-    silent: configService.get("APP_ENV") !== "dev",
+    silent: APP_ENV !== "dev",
+    botGuilds:
+      APP_ENV === "dev"
+        ? ["1265957323193716788", "1391117548036165752"]
+        : undefined,
   });
 
   client.once("ready", async () => {

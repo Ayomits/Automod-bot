@@ -1,18 +1,16 @@
 import { AutomodAnalyzeExplanaition } from "@/shared/api/automod/automod-analyze.js";
-import type { ModalSubmitInteraction } from "discord.js";
-import {
-  ActionRowBuilder,
-  ModalBuilder,
-  TextInputBuilder,
-  TextInputStyle,
-  type MessageContextMenuCommandInteraction,
-  type UserContextMenuCommandInteraction,
+import type {
+  CommandInteraction,
+  Snowflake,
+  TextChannel,
+  User,
 } from "discord.js";
+import { type MessageContextMenuCommandInteraction } from "discord.js";
 import { inject, injectable } from "tsyringe";
 import { ContextCommandAnalyzeMessage } from "../automod.messages.js";
 import { AutomodApi } from "@/shared/api/automod/automod.api.js";
-import type { UsersUtilityAccept } from "@/shared/lib/users.utility.js";
-import { UsersUtility } from "@/shared/lib/users.utility.js";
+import type { AutomodMessage } from "@/shared/api/automod/automod.types.js";
+import { ApiError } from "@/errors/api.error.js";
 
 @injectable()
 export class AutomodAnalyzeService {
@@ -56,59 +54,70 @@ export class AutomodAnalyzeService {
     });
   }
 
-  async analyzeUserMessages(interaction: UserContextMenuCommandInteraction) {
+  async analyzeUserMessages(
+    interaction: CommandInteraction,
+    limit: number,
+    user: User,
+    channel: TextChannel,
+  ) {
+    channel =
+      typeof channel !== "undefined"
+        ? channel
+        : (interaction.channel as TextChannel);
     await interaction.deferReply({ ephemeral: true });
-    await interaction.showModal(
-      this.buildModal(
-        UsersUtility.getUsername(
-          (interaction.targetMember ||
-            interaction.targetUser) as UsersUtilityAccept,
-        ),
-      ),
-    );
-  }
 
-  async analyseUserMessageModal(interaction: ModalSubmitInteraction) {
-    await interaction.deferReply({ ephemeral: true });
-    let limit = Number(interaction.fields.getTextInputValue("limit"));
-    let warnMessage = null;
-    if (Number.isNaN(limit)) {
-      warnMessage =
-        "Вы указали не число. Система возьмёт последнее сообщение пользователя в канале";
-      limit = 1;
-    }
-    if (limit <= 0) {
-      warnMessage =
-        "Вы указали число меньшее или равное нулю. Система возьмёт последнее сообщение пользователя в канале";
-      limit = 1;
-    }
-    if (limit > 50) {
-      warnMessage =
-        "Вы указали число свыше 50. Система возьмёт последние 50 сообщений в канале";
-      limit = 50;
-    }
+    const apiMessages = await this.collectMessagesToAnalyze(
+      channel,
+      user.id,
+      limit,
+    );
+
+    const explaination = new AutomodAnalyzeExplanaition();
+
     await interaction.editReply({
-      content: [
-        "Бот начинает проверку...",
-        warnMessage ? warnMessage : "",
-      ].join("\n"),
+      content: explaination.explain(apiMessages).toText(),
     });
   }
 
-  private buildModal(username: string) {
-    const limit = new ActionRowBuilder<TextInputBuilder>().addComponents(
-      new TextInputBuilder()
-        .setCustomId("limit")
-        .setLabel("Количество последних сообщений")
-        .setStyle(TextInputStyle.Short)
-        .setValue("10"),
-    );
+  private async collectMessagesToAnalyze(
+    channel: TextChannel,
+    userId: Snowflake,
+    limit: number,
+  ) {
+    const apiMessages: AutomodMessage[] = [];
 
-    const modal = new ModalBuilder()
-      .setCustomId("analyze-modal")
-      .setTitle(`Анализ пользователя ${username}`)
-      .addComponents(limit);
+    let before: Snowflake | undefined = undefined;
 
-    return modal;
+    while (apiMessages.length < limit) {
+      try {
+        const messages = await channel.messages.fetch({
+          limit: 100,
+          before: before ?? undefined,
+        });
+        const filtred: (AutomodMessage & { id: Snowflake })[] = messages
+          .filter((msg) => msg.author.id === userId && msg.content)
+          .map((msg) => ({
+            id: msg.id,
+            content: msg.content,
+            user_id: userId,
+            createdAt: msg.createdAt,
+          }));
+        apiMessages.push(...filtred);
+        if (apiMessages.length < limit) {
+          before = filtred[filtred.length - 1]!.id;
+        }
+      } catch (err) {
+        console.log(err);
+        break;
+      }
+    }
+    const analytics = await this.automodApi.automod({
+      messages: apiMessages.slice(0, limit),
+    });
+
+    if (!analytics) {
+      throw new ApiError("automod api did not respond");
+    }
+    return analytics.data;
   }
 }
