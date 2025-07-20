@@ -24,13 +24,21 @@ jobs:
           cache: "pnpm"
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          cd client
+          pnpm install --frozen-lockfile
 
       - name: Check prettier
-        run: pnpm run format:check
+        run: |
+         cd client
+         pnpm run format:check
 
       - name: Check lint
-        run: pnpm run lint:check
+        run: |
+          cd client
+          pnpm run lint:check
 
       - name: Run build
-        run: pnpm run build
+        run: |
+          cd client
+          pnpm run build
