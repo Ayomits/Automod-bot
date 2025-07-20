@@ -29,7 +29,7 @@ export class AutomodLogService {
 
   private sendLogs(
     channel: SendableChannels,
-    options: MessagePayload | MessageCreateOptions
+    options: MessagePayload | MessageCreateOptions,
   ) {
     try {
       channel.send(options);

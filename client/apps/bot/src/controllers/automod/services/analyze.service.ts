@@ -58,7 +58,7 @@ export class AutomodAnalyzeService {
     interaction: CommandInteraction,
     limit: number,
     user: User,
-    channel: TextChannel
+    channel: TextChannel,
   ) {
     channel =
       typeof channel !== "undefined"
@@ -69,7 +69,7 @@ export class AutomodAnalyzeService {
     const apiMessages = await this.collectMessagesToAnalyze(
       channel,
       user.id,
-      limit
+      limit,
     );
 
     const explaination = new AutomodAnalyzeExplanaition();
@@ -82,7 +82,7 @@ export class AutomodAnalyzeService {
   private async collectMessagesToAnalyze(
     channel: TextChannel,
     userId: Snowflake,
-    limit: number
+    limit: number,
   ) {
     const apiMessages: AutomodMessage[] = [];
 

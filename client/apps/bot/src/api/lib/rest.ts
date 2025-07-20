@@ -12,5 +12,5 @@ export const localCacheRest: Rest = createRestInstance(
         "Content-Type": "application/json",
       },
     },
-  }
+  },
 );
