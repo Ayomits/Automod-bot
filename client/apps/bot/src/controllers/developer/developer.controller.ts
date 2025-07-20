@@ -25,7 +25,7 @@ export class DeveloperController {
       required: false,
       type: ApplicationCommandOptionType.String,
     })
-    type: PingType,
+    type: PingType = PingType.All,
     interaction: CommandInteraction,
   ) {
     return this.pingService.execute(interaction, type);

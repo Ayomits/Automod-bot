@@ -16,7 +16,8 @@ export type PingType = LiteralEnum<typeof PingType>;
 @injectable()
 export class PingService {
   async execute(interaction: CommandInteraction, type: PingType = "all") {
-    await interaction.deferReply();
+    await interaction.deferReply({ ephemeral: true });
+
     const embed = new EmbedBuilder()
       .setTitle("Проверка задержки")
       .setThumbnail(UsersUtility.getAvatar(interaction.user))
@@ -34,17 +35,19 @@ export class PingService {
         inline: true,
       });
     }
+
     if (type === "message" || type == "all") {
-      const now = Date.now();
       fields.push({
-        name: PingMessages.ws.name,
-        value: PingMessages.ws.value(now - interaction.createdTimestamp),
+        name: PingMessages.message.name,
+        value: PingMessages.message.value(
+          Date.now() - interaction.createdTimestamp,
+        ),
         inline: true,
       });
     }
 
     return interaction.editReply({
-      embeds: [embed],
+      embeds: [embed.setFields(fields)],
     });
   }
 }

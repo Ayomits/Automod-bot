@@ -20,7 +20,7 @@ export const DevOnly: GuardFunction<CommandInteraction> = async (
     if (interaction.deferred) {
       return interaction.editReply(options as InteractionEditReplyOptions);
     }
-    return interaction.reply(options);
+    return interaction.reply({ ...options, ephemeral: true });
   }
 
   if (!DEVELOPERS.includes(interaction.user?.id)) {

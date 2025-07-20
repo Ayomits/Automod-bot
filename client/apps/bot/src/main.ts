@@ -20,6 +20,10 @@ async function bootstrap() {
       prefix: "!",
     },
     silent: APP_ENV !== "dev",
+    botGuilds:
+      APP_ENV === "dev"
+        ? ["1265957323193716788", "1391117548036165752"]
+        : undefined,
   });
 
   client.once("ready", async () => {
@@ -52,7 +56,7 @@ async function bootstrap() {
     }
   });
 
-  await importx(`${dirname(import.meta.url)}/modules/**/*.{ts,js}`);
+  await importx(`${dirname(import.meta.url)}/**/controllers/*.{ts,js}`);
 
   await client.login(configService.get("DISCORD_TOKEN")).then(() => {
     console.log("Successfully logged in");
