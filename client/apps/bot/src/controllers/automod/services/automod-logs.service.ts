@@ -11,7 +11,7 @@ import type {
 } from "discord.js";
 import { EmbedBuilder } from "discord.js";
 import { injectable } from "tsyringe";
-import { AutomodLogMessages } from "../automod.messages.js";
+import { AutomodLogMessages } from "../../../messages/automod.messages.js";
 
 @injectable()
 export class AutomodLogService {

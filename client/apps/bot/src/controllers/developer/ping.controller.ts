@@ -5,11 +5,11 @@ import {
 } from "discord.js";
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { inject, singleton } from "tsyringe";
-import { PingService, PingType } from "./services/ping.service.js";
+import { PingService, PingType } from "./ping.service.js";
 
 @Discord()
 @singleton()
-export class DeveloperController {
+export class PingController {
   constructor(@inject(PingService) private pingService: PingService) {}
 
   @Slash({

@@ -20,7 +20,7 @@ import {
   SlashOption,
 } from "discordx";
 import { inject, singleton } from "tsyringe";
-import { ContextCommandAnalyzeMessage } from "../automod.messages.js";
+import { ContextCommandAnalyzeMessage } from "../../../messages/automod.messages.js";
 import { RateLimit, TIME_UNIT } from "@discordx/utilities";
 import { AutomodAnalyzeService } from "../services/analyze.service.js";
 import { DevOnly } from "@/guards/dev-only.guard.js";

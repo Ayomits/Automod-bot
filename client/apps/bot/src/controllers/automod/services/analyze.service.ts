@@ -17,7 +17,7 @@ import { inject, injectable } from "tsyringe";
 import {
   ContextCommandAnalyzeLastUserMessages,
   ContextCommandAnalyzeMessage,
-} from "../automod.messages.js";
+} from "../../../messages/automod.messages.js";
 import { AutomodApi } from "@/api/automod/automod.api.js";
 import type { AutomodMessage } from "@/api/automod/automod.types.js";
 import { ApiError } from "@/errors/api.error.js";

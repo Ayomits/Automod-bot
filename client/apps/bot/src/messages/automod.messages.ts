@@ -80,7 +80,7 @@ export const ContextCommandAnalyzeLastUserMessages = {
         .join("\n"),
   },
   success: {
-    title: "Поздравляем, анализ завершён успешно",
+    title: "Поздравляем, анализ успешно завершён",
     description: (explaination: string) =>
       [bold("Результаты анализа:"), explaination].join("\n"),
   },
