@@ -23,6 +23,7 @@ import { inject, singleton } from "tsyringe";
 import { ContextCommandAnalyzeMessage } from "../automod.messages.js";
 import { RateLimit, TIME_UNIT } from "@discordx/utilities";
 import { AutomodAnalyzeService } from "../services/analyze.service.js";
+import { DevOnly } from "@/guards/dev-only.guard.js";
 
 @Discord()
 @singleton()
@@ -37,6 +38,7 @@ export class AutomodContextAnalyzeController {
     type: ApplicationCommandType.Message,
   })
   @Guard(
+    DevOnly,
     RateLimit(TIME_UNIT.seconds, 5, {
       ephemeral: true,
       rateValue: 1,
@@ -56,6 +58,7 @@ export class AutomodContextAnalyzeController {
     type: ApplicationCommandType.User,
   })
   @Guard(
+    DevOnly,
     RateLimit(TIME_UNIT.seconds, 5, {
       ephemeral: true,
       rateValue: 1,
@@ -80,6 +83,7 @@ export class AutomodContextAnalyzeController {
     description: "Automod analyze user messages",
   })
   @Guard(
+    DevOnly,
     RateLimit(TIME_UNIT.seconds, 30, {
       rateValue: 1,
       message(_, timeLeft) {

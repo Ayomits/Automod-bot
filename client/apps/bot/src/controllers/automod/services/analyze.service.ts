@@ -107,11 +107,11 @@ export class AutomodAnalyzeService {
     let warnMessage: string | null = null;
     const usrId = interaction.fields.getTextInputValue("usrid");
 
-    const usr = await interaction.guild?.members.fetch(usrId);
+    const member = await interaction.guild?.members.fetch(usrId);
 
     const baseEmbed = new EmbedBuilder();
 
-    if (!usr) {
+    if (!member) {
       const authorUsername = UsersUtility.getUsername(interaction.user);
       const authorAvatar = UsersUtility.getAvatar(interaction.user);
       return interaction.editReply({
@@ -129,12 +129,24 @@ export class AutomodAnalyzeService {
       });
     }
 
-    const usrUsername = UsersUtility.getUsername(usr);
-    const usrAvatar = UsersUtility.getAvatar(usr);
+    const usrUsername = UsersUtility.getUsername(member);
+    const usrAvatar = UsersUtility.getAvatar(member);
 
     baseEmbed
       .setThumbnail(usrAvatar)
       .setFooter({ text: usrUsername, iconURL: usrAvatar });
+
+    if (member.user.bot) {
+      return await interaction.editReply({
+        embeds: [
+          baseEmbed
+            .setTitle(ContextCommandAnalyzeLastUserMessages.validation.Title)
+            .setDescription(
+              ContextCommandAnalyzeLastUserMessages.validation.Bot,
+            ),
+        ],
+      });
+    }
 
     if (!(interaction.channel instanceof TextChannel)) {
       return interaction.editReply({
@@ -195,8 +207,7 @@ export class AutomodAnalyzeService {
             ),
         ],
       });
-    } catch (err) {
-      console.log(err);
+    } catch {
       return interaction.editReply({
         embeds: [
           baseEmbed
@@ -222,9 +233,55 @@ export class AutomodAnalyzeService {
         : (interaction.channel as TextChannel);
     await interaction.deferReply({ ephemeral: true });
 
-    await interaction.editReply({
-      content: await this.analyzeLastMessagesInChannel(channel, user.id, limit),
-    });
+    const usrAvatar = UsersUtility.getAvatar(user);
+    const usrUsername = UsersUtility.getUsername(user);
+
+    const baseEmbed = new EmbedBuilder()
+      .setThumbnail(usrAvatar)
+      .setFooter({ text: usrUsername, iconURL: usrAvatar });
+
+    if (user.bot) {
+      return await interaction.editReply({
+        embeds: [
+          baseEmbed
+            .setTitle(ContextCommandAnalyzeLastUserMessages.validation.Title)
+            .setDescription(
+              ContextCommandAnalyzeLastUserMessages.validation.Bot,
+            ),
+        ],
+      });
+    }
+
+    try {
+      const explaination = await this.analyzeLastMessagesInChannel(
+        channel,
+        user.id,
+        limit,
+      );
+
+      return interaction.editReply({
+        embeds: [
+          baseEmbed
+            .setTitle(ContextCommandAnalyzeLastUserMessages.success.title)
+            .setDescription(
+              ContextCommandAnalyzeLastUserMessages.success.description(
+                explaination,
+              ),
+            ),
+        ],
+      });
+    } catch {
+      return interaction.editReply({
+        embeds: [
+          baseEmbed
+            .setTitle(ContextCommandAnalyzeLastUserMessages.failure.title)
+            .setDescription(
+              ContextCommandAnalyzeLastUserMessages.failure.description,
+            ),
+        ],
+      });
+    }
+    return;
   }
 
   private async analyzeLastMessagesInChannel(

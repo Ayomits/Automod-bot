@@ -56,6 +56,7 @@ export const AutomodLogMessages = {
 
 export const ContextCommandAnalyzeMessage = {
   validation: {
+    title: "Ошибка...",
     bot: "Невозможно проанализировать сообщение от бота",
     empty: "Невозможно проанализировать сообщение без текста",
     internal: "Произошла внутренняя ошибка",
@@ -98,5 +99,6 @@ export const ContextCommandAnalyzeLastUserMessages = {
       title: "Пользователь не найден",
       description: "Указанный вами ID пользователя не найден на сервере",
     },
+    Bot: "Указанный вами пользователь - бот",
   },
 } as const;
