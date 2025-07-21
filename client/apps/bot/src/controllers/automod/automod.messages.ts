@@ -1,5 +1,5 @@
 import { AutomodRule, type AutomodMatch } from "@/api/automod/automod.types.js";
-import { userMention, codeBlock } from "discord.js";
+import { userMention, codeBlock, bold } from "discord.js";
 
 export const AutomodWarningMessageExplanaition = {
   Caps: "В вашем сообщении слишком много букв в верхнем регистре",
@@ -62,5 +62,37 @@ export const ContextCommandAnalyzeMessage = {
     request: "Произошла ошибка во время запроса к боту...",
     rate: (timeLeft: number | string) =>
       `Ошибка. Команду можно использовать через ${timeLeft} секунд`,
+  },
+} as const;
+
+export const ContextCommandAnalyzeLastUserMessages = {
+  awaiting: {
+    title: (username: string) =>
+      `Система анализирует пользователя ${username}...`,
+    description: (warnMessage: string | null) =>
+      [
+        warnMessage && bold("[ПРЕДУПРЕЖДЕНИЕ]"),
+        warnMessage,
+        "Пожалуйста подождите...",
+      ]
+        .filter(Boolean)
+        .join("\n"),
+  },
+  success: {
+    title: "Поздравляем, анализ завершён успешно",
+    description: (explaination: string) =>
+      [bold("Результаты анализа:"), explaination].join("\n"),
+  },
+  failure: {
+    title: "Произошла ошибка",
+    description: "Во время анализа что-то пошло не так..."
+  },
+  validation: {
+    title: "Ошибка...",
+    NaN: "Указанное число таковым не является, система выставила лимит равный 1",
+    Max: "Указанное число выше 50, система выставила максимальный порог",
+    Min: "Указанное число меньше или равно нулю, система выставила лимит равный 1",
+    ChannelType:
+      "Команда использована не в том канале. Возможно, что вы нажали на пользователя, находящегося в голосовом чате",
   },
 } as const;

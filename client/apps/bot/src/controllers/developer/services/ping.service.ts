@@ -1,5 +1,5 @@
-import { EmbedBuilder } from "@/lib/embed.builder.js";
-import { UsersUtility } from "@/lib/users.utility.js";
+import { EmbedBuilder } from "@/lib/embed/embed.builder.js";
+import { UsersUtility } from "@/lib/embed/users.utility.js";
 import type { APIEmbedField, CommandInteraction } from "discord.js";
 import { injectable } from "tsyringe";
 import { PingMessages } from "../developer.messages.js";
@@ -40,7 +40,7 @@ export class PingService {
       fields.push({
         name: PingMessages.message.name,
         value: PingMessages.message.value(
-          Date.now() - interaction.createdTimestamp,
+          Date.now() - interaction.createdTimestamp
         ),
         inline: true,
       });

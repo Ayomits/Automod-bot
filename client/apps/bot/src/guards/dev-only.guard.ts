@@ -1,6 +1,6 @@
 import { DEVELOPERS } from "@/const/developers.js";
-import { EmbedBuilder } from "@/lib/embed.builder.js";
-import { UsersUtility } from "@/lib/users.utility.js";
+import { EmbedBuilder } from "@/lib/embed/embed.builder.js";
+import { UsersUtility } from "@/lib/embed/users.utility.js";
 import type {
   CommandInteraction,
   InteractionEditReplyOptions,
@@ -11,7 +11,7 @@ import type { GuardFunction } from "discordx";
 export const DevOnly: GuardFunction<CommandInteraction> = async (
   interaction,
   _client,
-  next,
+  next
 ) => {
   function reply(options: InteractionReplyOptions) {
     if (interaction.replied) {
@@ -28,6 +28,7 @@ export const DevOnly: GuardFunction<CommandInteraction> = async (
       embeds: [
         new EmbedBuilder()
           .setTitle("Вы не являетесь разработчиком")
+          .setDescription("К сожалению, вы не можете выполнить эту команду")
           .setThumbnail(UsersUtility.getAvatar(interaction.user))
           .setTimestamp(Date.now())
           .setFooter({

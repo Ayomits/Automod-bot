@@ -65,7 +65,7 @@ export class AutomodLogService {
   }
 
   private async getLogChannel(guild: Guild) {
-    const channel = await guild.channels.fetch("1391117549952958596", {
+    const channel = await guild.channels.fetch("1392969577868296384", {
       cache: true,
     });
     if (!channel) {

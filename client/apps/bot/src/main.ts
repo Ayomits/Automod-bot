@@ -56,7 +56,7 @@ async function bootstrap() {
     }
   });
 
-  await importx(`${dirname(import.meta.url)}/**/controllers/*.{ts,js}`);
+  await importx(`${dirname(import.meta.url)}/**/*.{ts,js}`);
 
   await client.login(configService.get("DISCORD_TOKEN")).then(() => {
     console.log("Successfully logged in");
