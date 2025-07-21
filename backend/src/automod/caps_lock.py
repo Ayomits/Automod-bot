@@ -31,7 +31,7 @@ class CapsLock:
         all_symbols = MessageCleanUp.clean_up(content=content, return_string=True)
 
         all_caps_length = len(all_caps_symbols)
-        all_symbols_length = len(all_symbols)
+        all_symbols_length = len(all_symbols) if len(all_symbols) != 0 else 1
 
         caps_percent = round(all_caps_length / all_symbols_length * 100)
 
@@ -44,14 +44,14 @@ class CapsLock:
         if type == CapsLockType.Mixed.value:
             mapped_words = [self.__filter_mixed_words(i, word, all_symbols) for i, word in enumerate(all_symbols)]
             filtred_words = list(filter(lambda w: w.is_potential, mapped_words))
-            percantage = round(len(filtred_words) / len(all_symbols) * 100)
+            percantage = round(len(filtred_words) / all_symbols_length * 100)
             return percantage >= self.__options.mixed_words_trigger_percentage
 
     def __filter_mixed_words(self, i: int, word: str, self_arr: list[str], once = False) -> bool:
         all_symbols = MessageCleanUp.clean_up(content=word)
         all_caps_symbols = MessageCleanUp.caps_symbols(content=word)
         all_caps_length = len(all_caps_symbols)
-        all_symbols_length = len(all_symbols)
+        all_symbols_length = len(all_symbols) if len(all_symbols) != 0 else 1
 
         if all_caps_length <= 1:
             return CapslockMatch(word=word, is_potential=False)
