@@ -1,4 +1,3 @@
-import { AutomodAnalyzeExplanaition } from "@/api/automod/automod-analyze.js";
 import type {
   CommandInteraction,
   ModalSubmitInteraction,
@@ -10,19 +9,22 @@ import { TextChannel } from "discord.js";
 import { TextInputBuilder, TextInputStyle } from "discord.js";
 import {
   ActionRowBuilder,
-  ModalBuilder,
   type MessageContextMenuCommandInteraction,
+  ModalBuilder,
 } from "discord.js";
 import { inject, injectable } from "tsyringe";
+
+import { AutomodApi } from "@/api/automod/automod.api.js";
+import type { AutomodMessage } from "@/api/automod/automod.types.js";
+import { AutomodAnalyzeExplanaition } from "@/api/automod/automod-analyze.js";
+import { ApiError } from "@/errors/api.error.js";
+import { EmbedBuilder } from "@/lib/embed/embed.builder.js";
+import { UsersUtility } from "@/lib/embed/users.utility.js";
+
 import {
   ContextCommandAnalyzeLastUserMessages,
   ContextCommandAnalyzeMessage,
 } from "../../../messages/automod.messages.js";
-import { AutomodApi } from "@/api/automod/automod.api.js";
-import type { AutomodMessage } from "@/api/automod/automod.types.js";
-import { ApiError } from "@/errors/api.error.js";
-import { EmbedBuilder } from "@/lib/embed/embed.builder.js";
-import { UsersUtility } from "@/lib/embed/users.utility.js";
 
 @injectable()
 export class AutomodAnalyzeService {

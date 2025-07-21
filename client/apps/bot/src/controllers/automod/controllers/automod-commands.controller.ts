@@ -1,3 +1,4 @@
+import { RateLimit, TIME_UNIT } from "@discordx/utilities";
 import type {
   CommandInteraction,
   MessageContextMenuCommandInteraction,
@@ -20,10 +21,11 @@ import {
   SlashOption,
 } from "discordx";
 import { inject, singleton } from "tsyringe";
-import { ContextCommandAnalyzeMessage } from "../../../messages/automod.messages.js";
-import { RateLimit, TIME_UNIT } from "@discordx/utilities";
-import { AutomodAnalyzeService } from "../services/analyze.service.js";
+
 import { DevOnly } from "@/guards/dev-only.guard.js";
+
+import { ContextCommandAnalyzeMessage } from "../../../messages/automod.messages.js";
+import { AutomodAnalyzeService } from "../services/analyze.service.js";
 
 @Discord()
 @singleton()

@@ -1,16 +1,18 @@
 import type {
+  Guild,
+  MessageCreateOptions,
+  MessagePayload,
+  SendableChannels,
+} from "discord.js";
+import { EmbedBuilder } from "discord.js";
+import { injectable } from "tsyringe";
+
+import type {
   AutomodMatch,
   AutomodResponse,
   AutomodRule,
 } from "@/api/automod/automod.types.js";
-import type {
-  SendableChannels,
-  MessagePayload,
-  MessageCreateOptions,
-  Guild,
-} from "discord.js";
-import { EmbedBuilder } from "discord.js";
-import { injectable } from "tsyringe";
+
 import { AutomodLogMessages } from "../../../messages/automod.messages.js";
 
 @injectable()

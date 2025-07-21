@@ -1,5 +1,6 @@
 import { type ArgsOf, Discord, On } from "discordx";
 import { inject, singleton } from "tsyringe";
+
 import { AIAutoAnalyzeService } from "../services/ai-auto-analyze.service.js";
 import { AlgsAutomodService } from "../services/algs-auto-analyze.service.js";
 

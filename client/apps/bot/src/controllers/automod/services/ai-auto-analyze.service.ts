@@ -1,9 +1,11 @@
-import { AutomodApi } from "@/api/automod/automod.api.js";
-import { LocalCache } from "@/cache/local.cache.js";
-import { inject, injectable } from "tsyringe";
-import { AutomodLogService } from "./automod-logs.service.js";
 import type { Guild, Message, Snowflake } from "discord.js";
+import { inject, injectable } from "tsyringe";
+
+import { AutomodApi } from "@/api/automod/automod.api.js";
 import type { AutomodMessage } from "@/api/automod/automod.types.js";
+import { LocalCache } from "@/cache/local.cache.js";
+
+import { AutomodLogService } from "./automod-logs.service.js";
 
 const MESSAGE_CACHE_KEYS_LIMIT = 10;
 const CLEAN_TIMEOUT_DELAY = 10_000;

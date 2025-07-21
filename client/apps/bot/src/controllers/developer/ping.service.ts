@@ -1,9 +1,10 @@
-import { EmbedBuilder } from "@/lib/embed/embed.builder.js";
-import { UsersUtility } from "@/lib/embed/users.utility.js";
+import type { LiteralEnum } from "@ts-fetcher/types";
 import type { APIEmbedField, CommandInteraction } from "discord.js";
 import { injectable } from "tsyringe";
+
+import { EmbedBuilder } from "@/lib/embed/embed.builder.js";
+import { UsersUtility } from "@/lib/embed/users.utility.js";
 import { PingMessages } from "@/messages/developer.messages.js";
-import type { LiteralEnum } from "@ts-fetcher/types";
 
 export const PingType = {
   Ws: "ws",

@@ -1,4 +1,5 @@
 import { injectable } from "tsyringe";
+
 import { localCacheRest } from "../lib/rest.js";
 import {
   AUTOMOD_AI_RULES,

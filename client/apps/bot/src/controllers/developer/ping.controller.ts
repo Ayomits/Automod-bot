@@ -1,10 +1,12 @@
-import { DevOnly } from "@/guards/dev-only.guard.js";
 import {
   ApplicationCommandOptionType,
   type CommandInteraction,
 } from "discord.js";
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { inject, singleton } from "tsyringe";
+
+import { DevOnly } from "@/guards/dev-only.guard.js";
+
 import { PingService, PingType } from "./ping.service.js";
 
 @Discord()

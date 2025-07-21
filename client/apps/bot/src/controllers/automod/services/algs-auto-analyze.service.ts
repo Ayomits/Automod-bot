@@ -1,6 +1,8 @@
-import { AutomodApi } from "@/api/automod/automod.api.js";
 import type { Message } from "discord.js";
 import { inject, injectable } from "tsyringe";
+
+import { AutomodApi } from "@/api/automod/automod.api.js";
+
 import { AutomodLogService } from "./automod-logs.service.js";
 
 @injectable()

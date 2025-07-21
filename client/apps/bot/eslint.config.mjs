@@ -1,11 +1,13 @@
-import globals from "globals";
-import tsParser from "@typescript-eslint/parser";
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import js from "@eslint/js";
-import { defineConfig } from "eslint/config";
-import { FlatCompat } from "@eslint/eslintrc";
-import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { FlatCompat } from "@eslint/eslintrc";
+import js from "@eslint/js";
+import typescriptEslint from "@typescript-eslint/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
+import { defineConfig } from "eslint/config";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
+import globals from "globals";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -32,9 +34,12 @@ export default defineConfig([
     ),
     plugins: {
       "@typescript-eslint": typescriptEslint,
+      "simple-import-sort": simpleImportSort,
     },
     rules: {
       semi: "error",
+      "simple-import-sort/imports": "error",
+      "simple-import-sort/exports": "error",
       "@typescript-eslint/consistent-type-imports": [
         "error",
         {

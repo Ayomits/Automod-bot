@@ -1,12 +1,13 @@
-import { DEVELOPERS } from "@/const/developers.js";
-import { EmbedBuilder } from "@/lib/embed/embed.builder.js";
-import { UsersUtility } from "@/lib/embed/users.utility.js";
 import type {
   CommandInteraction,
   InteractionEditReplyOptions,
   InteractionReplyOptions,
 } from "discord.js";
 import type { GuardFunction } from "discordx";
+
+import { DEVELOPERS } from "@/const/developers.js";
+import { EmbedBuilder } from "@/lib/embed/embed.builder.js";
+import { UsersUtility } from "@/lib/embed/users.utility.js";
 
 export const DevOnly: GuardFunction<CommandInteraction> = async (
   interaction,

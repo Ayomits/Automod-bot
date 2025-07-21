@@ -1,5 +1,6 @@
-import { AutomodRule, type AutomodMatch } from "@/api/automod/automod.types.js";
-import { userMention, codeBlock, bold } from "discord.js";
+import { bold,codeBlock, userMention } from "discord.js";
+
+import { type AutomodMatch,AutomodRule } from "@/api/automod/automod.types.js";
 
 export const AutomodWarningMessageExplanaition = {
   Caps: "В вашем сообщении слишком много букв в верхнем регистре",

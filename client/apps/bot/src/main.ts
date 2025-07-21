@@ -1,10 +1,12 @@
 import "reflect-metadata";
-import { Client, DIService, tsyringeDependencyRegistryEngine } from "discordx";
-import { importx, dirname } from "@discordx/importer";
-import { configService } from "./config/config.js";
+
+import { dirname,importx } from "@discordx/importer";
 import type { Interaction, Message } from "discord.js";
 import { GatewayIntentBits } from "discord.js";
+import { Client, DIService, tsyringeDependencyRegistryEngine } from "discordx";
 import { container } from "tsyringe";
+
+import { configService } from "./config/config.js";
 
 async function bootstrap() {
   DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
