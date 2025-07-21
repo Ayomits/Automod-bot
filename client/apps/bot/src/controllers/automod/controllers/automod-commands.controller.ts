@@ -1,6 +1,7 @@
 import type {
   CommandInteraction,
   MessageContextMenuCommandInteraction,
+  ModalSubmitInteraction,
   TextChannel,
   User,
   UserContextMenuCommandInteraction,
@@ -10,7 +11,14 @@ import {
   ApplicationCommandType,
   ChannelType,
 } from "discord.js";
-import { ContextMenu, Discord, Guard, Slash, SlashOption } from "discordx";
+import {
+  ContextMenu,
+  Discord,
+  Guard,
+  ModalComponent,
+  Slash,
+  SlashOption,
+} from "discordx";
 import { inject, singleton } from "tsyringe";
 import { ContextCommandAnalyzeMessage } from "../automod.messages.js";
 import { RateLimit, TIME_UNIT } from "@discordx/utilities";
@@ -39,8 +47,8 @@ export class AutomodContextAnalyzeController {
       },
     })
   )
-  analyzeLastMessage(interaction: MessageContextMenuCommandInteraction) {
-    return this.automodAnalyzer.analyzeOneMessage(interaction);
+  analyzeLastUserMessage(interaction: MessageContextMenuCommandInteraction) {
+    return this.automodAnalyzer.analyzeLastUserMessageContext(interaction);
   }
 
   @ContextMenu({
@@ -59,17 +67,13 @@ export class AutomodContextAnalyzeController {
     })
   )
   analyzeLastUserMessages(interaction: UserContextMenuCommandInteraction) {
-    return this.automodAnalyzer.analyzeUserMessagesContext(interaction);
+    return this.automodAnalyzer.analyzeLastUserMessagesContext(interaction);
   }
-}
 
-@Discord()
-@singleton()
-export class AutomodCommandAnalyzeController {
-  constructor(
-    @inject(AutomodAnalyzeService)
-    private automodAnalyzer: AutomodAnalyzeService
-  ) {}
+  @ModalComponent({ id: "analyze-last-usr-messages" })
+  analyzeLastUserMessagesModal(interaction: ModalSubmitInteraction) {
+    return this.automodAnalyzer.analyzeLastUserMessagesModal(interaction);
+  }
 
   @Slash({
     name: "analyze-messages",
@@ -112,7 +116,7 @@ export class AutomodCommandAnalyzeController {
     channel: TextChannel,
     interaction: CommandInteraction
   ) {
-    return this.automodAnalyzer.analyzeUserMessagesSlash(
+    return this.automodAnalyzer.analyzeLastUserMessagesSlash(
       interaction,
       limit,
       user,

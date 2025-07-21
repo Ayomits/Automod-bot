@@ -1,6 +1,7 @@
 import { AutomodAnalyzeExplanaition } from "@/api/automod/automod-analyze.js";
 import type {
   CommandInteraction,
+  ModalSubmitInteraction,
   Snowflake,
   User,
   UserContextMenuCommandInteraction,
@@ -9,6 +10,7 @@ import { TextChannel } from "discord.js";
 import { TextInputBuilder, TextInputStyle } from "discord.js";
 import {
   ActionRowBuilder,
+  ModalBuilder,
   type MessageContextMenuCommandInteraction,
 } from "discord.js";
 import { inject, injectable } from "tsyringe";
@@ -21,18 +23,14 @@ import type { AutomodMessage } from "@/api/automod/automod.types.js";
 import { ApiError } from "@/errors/api.error.js";
 import { EmbedBuilder } from "@/lib/embed/embed.builder.js";
 import { UsersUtility } from "@/lib/embed/users.utility.js";
-import { InlineModalBuilder } from "@/lib/builders/modal.builder.js";
-import { InlineHanderService } from "@/lib/handling/inline.handerl.js";
 
 @injectable()
 export class AutomodAnalyzeService {
-  constructor(
-    @inject(AutomodApi) private automodApi: AutomodApi,
-    @inject(InlineHanderService)
-    private inlineHandlerService: InlineHanderService
-  ) {}
+  constructor(@inject(AutomodApi) private automodApi: AutomodApi) {}
 
-  async analyzeOneMessage(interaction: MessageContextMenuCommandInteraction) {
+  async analyzeLastUserMessageContext(
+    interaction: MessageContextMenuCommandInteraction
+  ) {
     await interaction.deferReply({ ephemeral: true });
     if (interaction.targetMessage.author.bot) {
       return await interaction.editReply({
@@ -70,119 +68,149 @@ export class AutomodAnalyzeService {
     });
   }
 
-  async analyzeUserMessagesContext(
+  async analyzeLastUserMessagesContext(
     interaction: UserContextMenuCommandInteraction
   ) {
-    const modalCustomId = `analyze-last-usr-messages`;
-    const modal = new InlineModalBuilder()
-      .setTitle("Анализ последних сообщений")
-      .setCustomId(modalCustomId);
+    const modal = new ModalBuilder()
+      .setTitle("Анализ последних сообщений пользователя")
+      .setCustomId("analyze-last-usr-messages");
+
+    const usrId = new ActionRowBuilder<TextInputBuilder>().addComponents(
+      new TextInputBuilder()
+        .setCustomId("usrid")
+        .setLabel("User Id")
+        .setRequired(true)
+        .setValue(interaction.targetUser.id)
+        .setMaxLength(19)
+        .setMinLength(17)
+        .setStyle(TextInputStyle.Short)
+    );
+
     const limit = new ActionRowBuilder<TextInputBuilder>().addComponents(
       new TextInputBuilder()
         .setCustomId("limit")
         .setLabel("Количество сообщений")
-        .setPlaceholder("Натуральное число до 50")
-        .setStyle(TextInputStyle.Short)
+        .setRequired(true)
         .setValue("10")
+        .setMaxLength(2)
+        .setMinLength(2)
+        .setStyle(TextInputStyle.Short)
     );
 
-    modal.addComponents(limit);
-
-    const targetUsername = UsersUtility.getUsername(interaction.targetUser);
-    const targetAvatar = UsersUtility.getAvatar(interaction.targetUser);
-
-    interaction.showModal(modal);
-
-    this.inlineHandlerService
-      .initialize(interaction.client)
-      .registerModalHandler(modal.toJSON().custom_id, async (inter) => {
-        await inter.deferReply({ ephemeral: true });
-        let limit = Number(inter.fields.getTextInputValue("limit"));
-        let warnMessage = null;
-
-        if (Number.isNaN(limit)) {
-          limit = 1;
-          warnMessage = ContextCommandAnalyzeLastUserMessages.validation.NaN;
-        }
-
-        if (limit <= 0) {
-          warnMessage = ContextCommandAnalyzeLastUserMessages.validation.Min;
-        }
-
-        if (limit > 50) {
-          limit = 50;
-          warnMessage = ContextCommandAnalyzeLastUserMessages.validation.Max;
-        }
-
-        const baseEmbed = new EmbedBuilder()
-          .setThumbnail(targetAvatar)
-          .setFooter({
-            iconURL: targetAvatar,
-            text: targetUsername,
-          });
-
-        if (!(inter.channel instanceof TextChannel)) {
-          return inter.followUp({
-            embeds: [
-              baseEmbed
-                .setTitle(
-                  ContextCommandAnalyzeLastUserMessages.validation.title
-                )
-                .setDescription(
-                  ContextCommandAnalyzeLastUserMessages.validation.ChannelType
-                ),
-            ],
-          });
-        }
-
-        inter.followUp({
-          embeds: [
-            baseEmbed
-              .setTitle(
-                ContextCommandAnalyzeLastUserMessages.awaiting.title(
-                  targetUsername
-                )
-              )
-              .setDescription(
-                ContextCommandAnalyzeLastUserMessages.awaiting.description(
-                  warnMessage
-                )
-              ),
-          ],
-        });
-
-        try {
-          const explaination = await this.analyzeLastUserMessages(
-            inter.channel,
-            interaction.targetUser.id,
-            limit
-          );
-          return inter.editReply({
-            embeds: [
-              baseEmbed
-                .setTitle(ContextCommandAnalyzeLastUserMessages.success.title)
-                .setDescription(
-                  ContextCommandAnalyzeLastUserMessages.success.description(
-                    explaination
-                  )
-                ),
-            ],
-          });
-        } catch {
-          return inter.editReply({
-            embeds: [
-              baseEmbed
-                .setTitle(ContextCommandAnalyzeLastUserMessages.failure.title)
-                .setDescription(
-                  ContextCommandAnalyzeLastUserMessages.failure.description
-                ),
-            ],
-          });
-        }
-      });
+    modal.addComponents(usrId, limit);
+    return interaction.showModal(modal);
   }
 
-  async analyzeUserMessagesSlash(
+  async analyzeLastUserMessagesModal(interaction: ModalSubmitInteraction) {
+    await interaction.deferReply({ ephemeral: true });
+    let limit = Number(interaction.fields.getTextInputValue("limit"));
+    let warnMessage: string | null = null;
+    const usrId = interaction.fields.getTextInputValue("usrid");
+
+    const usr = await interaction.guild?.members.fetch(usrId);
+
+    const baseEmbed = new EmbedBuilder();
+
+    if (!usr) {
+      const authorUsername = UsersUtility.getUsername(interaction.user);
+      const authorAvatar = UsersUtility.getAvatar(interaction.user);
+      return interaction.editReply({
+        embeds: [
+          baseEmbed
+            .setTitle(
+              ContextCommandAnalyzeLastUserMessages.validation.User.title
+            )
+            .setDescription(
+              ContextCommandAnalyzeLastUserMessages.validation.User.description
+            )
+            .setThumbnail(authorAvatar)
+            .setFooter({ iconURL: authorAvatar, text: authorUsername }),
+        ],
+      });
+    }
+
+    const usrUsername = UsersUtility.getUsername(usr);
+    const usrAvatar = UsersUtility.getAvatar(usr);
+
+    baseEmbed
+      .setThumbnail(usrAvatar)
+      .setFooter({ text: usrUsername, iconURL: usrAvatar });
+
+    if (!(interaction.channel instanceof TextChannel)) {
+      return interaction.editReply({
+        embeds: [
+          baseEmbed
+            .setTitle(ContextCommandAnalyzeLastUserMessages.validation.Title)
+            .setDescription(
+              ContextCommandAnalyzeLastUserMessages.validation.ChannelType
+            ),
+        ],
+      });
+    }
+
+    if (Number.isNaN(limit)) {
+      limit = 1;
+      warnMessage = ContextCommandAnalyzeLastUserMessages.validation.NaN;
+    }
+
+    if (limit <= 0) {
+      limit = 1;
+      warnMessage = ContextCommandAnalyzeLastUserMessages.validation.Min;
+    }
+
+    if (limit > 50) {
+      limit = 50;
+      warnMessage = ContextCommandAnalyzeLastUserMessages.validation.Max;
+    }
+
+    interaction.followUp({
+      embeds: [
+        baseEmbed
+          .setTitle(
+            ContextCommandAnalyzeLastUserMessages.awaiting.title(usrUsername)
+          )
+          .setDescription(
+            ContextCommandAnalyzeLastUserMessages.awaiting.description(
+              warnMessage
+            )
+          ),
+      ],
+    });
+
+    try {
+      const explaination = await this.analyzeLastMessagesInChannel(
+        interaction.channel,
+        usrId,
+        limit
+      );
+
+      return interaction.editReply({
+        embeds: [
+          baseEmbed
+            .setTitle(ContextCommandAnalyzeLastUserMessages.success.title)
+            .setDescription(
+              ContextCommandAnalyzeLastUserMessages.success.description(
+                explaination
+              )
+            ),
+        ],
+      });
+    } catch (err) {
+      console.log(err);
+      return interaction.editReply({
+        embeds: [
+          baseEmbed
+            .setTitle(ContextCommandAnalyzeLastUserMessages.failure.title)
+            .setDescription(
+              ContextCommandAnalyzeLastUserMessages.failure.description
+            ),
+        ],
+      });
+    }
+    return;
+  }
+
+  async analyzeLastUserMessagesSlash(
     interaction: CommandInteraction,
     limit: number,
     user: User,
@@ -194,18 +222,12 @@ export class AutomodAnalyzeService {
         : (interaction.channel as TextChannel);
     await interaction.deferReply({ ephemeral: true });
 
-    const explaination = await this.analyzeLastUserMessages(
-      channel,
-      user.id,
-      limit
-    );
-
     await interaction.editReply({
-      content: explaination,
+      content: await this.analyzeLastMessagesInChannel(channel, user.id, limit),
     });
   }
 
-  private async analyzeLastUserMessages(
+  private async analyzeLastMessagesInChannel(
     channel: TextChannel,
     userId: Snowflake,
     limit: number
@@ -217,6 +239,7 @@ export class AutomodAnalyzeService {
     );
 
     const explaination = new AutomodAnalyzeExplanaition();
+
     return explaination.explain(apiMessages).toText();
   }
 
@@ -226,15 +249,15 @@ export class AutomodAnalyzeService {
     limit: number
   ) {
     const apiMessages: AutomodMessage[] = [];
-
     let before: Snowflake | undefined = undefined;
 
     while (apiMessages.length < limit) {
       try {
         const messages = await channel.messages.fetch({
           limit: 100,
-          before: before ?? undefined,
+          before: before,
         });
+
         const filtred: (AutomodMessage & { id: Snowflake })[] = messages
           .filter((msg) => msg.author.id === userId && msg.content)
           .map((msg) => ({
@@ -243,15 +266,27 @@ export class AutomodAnalyzeService {
             user_id: userId,
             createdAt: msg.createdAt,
           }));
+
+        if (filtred.length === 0) {
+          break;
+        }
+
         apiMessages.push(...filtred);
+
         if (apiMessages.length < limit) {
-          before = filtred[filtred.length - 1]!.id;
+          const lastMessage = filtred[filtred.length - 1];
+          if (lastMessage) {
+            before = lastMessage.id;
+          } else {
+            break;
+          }
         }
       } catch (err) {
         console.log(err);
         break;
       }
     }
+
     const analytics = await this.automodApi.automod({
       messages: apiMessages.slice(0, limit),
     });
