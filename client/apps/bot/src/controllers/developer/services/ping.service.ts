@@ -40,7 +40,7 @@ export class PingService {
       fields.push({
         name: PingMessages.message.name,
         value: PingMessages.message.value(
-          Date.now() - interaction.createdTimestamp
+          Date.now() - interaction.createdTimestamp,
         ),
         inline: true,
       });

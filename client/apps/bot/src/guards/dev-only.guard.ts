@@ -11,7 +11,7 @@ import type { GuardFunction } from "discordx";
 export const DevOnly: GuardFunction<CommandInteraction> = async (
   interaction,
   _client,
-  next
+  next,
 ) => {
   function reply(options: InteractionReplyOptions) {
     if (interaction.replied) {
