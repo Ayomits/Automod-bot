@@ -1,12 +1,12 @@
-import { injectable } from "tsyringe";
-
-import { localCacheRest } from "../lib/rest.js";
 import {
   AUTOMOD_AI_RULES,
   AUTOMOD_ALGHORITHMIC_RULES,
   type AutomodRequest,
   type AutomodResponse,
-} from "./automod.types.js";
+} from "@automod/types";
+import { injectable } from "tsyringe";
+
+import { localCacheRest } from "../lib/rest.js";
 
 @injectable()
 export class AutomodApi {

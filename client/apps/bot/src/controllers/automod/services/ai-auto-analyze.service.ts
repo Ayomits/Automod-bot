@@ -1,8 +1,8 @@
+import type { AutomodMessage } from "@automod/types";
 import type { Guild, Message, Snowflake } from "discord.js";
 import { inject, injectable } from "tsyringe";
 
 import { AutomodApi } from "@/api/automod/automod.api.js";
-import type { AutomodMessage } from "@/api/automod/automod.types.js";
 import { LocalCache } from "@/cache/local.cache.js";
 
 import { AutomodLogService } from "./automod-logs.service.js";

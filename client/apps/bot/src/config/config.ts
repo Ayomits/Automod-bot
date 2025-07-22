@@ -1,6 +1,5 @@
+import type { ConfigService as ConfigServiceInterface } from "@automod/types";
 import dt from "dotenv";
-
-import type { ConfigService as ConfigServiceInterface } from "./types.js";
 
 export class ConfigService implements ConfigServiceInterface {
   private entries: dt.DotenvParseOutput;

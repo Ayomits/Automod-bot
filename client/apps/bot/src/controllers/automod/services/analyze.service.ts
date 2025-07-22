@@ -1,3 +1,4 @@
+import type { AutomodMessage } from "@automod/types";
 import type {
   CommandInteraction,
   ModalSubmitInteraction,
@@ -15,7 +16,6 @@ import {
 import { inject, injectable } from "tsyringe";
 
 import { AutomodApi } from "@/api/automod/automod.api.js";
-import type { AutomodMessage } from "@/api/automod/automod.types.js";
 import { AutomodAnalyzeExplanaition } from "@/api/automod/automod-analyze.js";
 import { ApiError } from "@/errors/api.error.js";
 import { EmbedBuilder } from "@/lib/embed/embed.builder.js";

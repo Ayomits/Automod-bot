@@ -1,4 +1,4 @@
-import type { ArgsOf,GuardFunction } from "discordx";
+import type { ArgsOf, GuardFunction } from "discordx";
 
 export const ComponentAuthorOnly: GuardFunction<
   ArgsOf<"interactionCreate">

@@ -1,4 +1,10 @@
 import type {
+  AutomodMatch,
+  AutomodResponse,
+  AutomodRule,
+  ObjectKeys,
+} from "@automod/types";
+import type {
   Guild,
   MessageCreateOptions,
   MessagePayload,
@@ -6,12 +12,6 @@ import type {
 } from "discord.js";
 import { EmbedBuilder } from "discord.js";
 import { injectable } from "tsyringe";
-
-import type {
-  AutomodMatch,
-  AutomodResponse,
-  AutomodRule,
-} from "@/api/automod/automod.types.js";
 
 import { AutomodLogMessages } from "../../../messages/automod.messages.js";
 
@@ -43,7 +43,7 @@ export class AutomodLogService {
   private resolveMatches(guild: Guild, matches: AutomodMatch[]) {
     const embeds = matches.map((match) => {
       return match.rules.map((rule: AutomodRule) => {
-        // @ts-expect-error idk
+        // @ts-expect-error temporary it needed
         const messages = this.getLogMessagesByType(rule);
         const user = guild.members.cache.get(match.user_id);
         const avatar = user?.displayAvatarURL() ?? user?.avatarURL() ?? null;
@@ -76,7 +76,7 @@ export class AutomodLogService {
     return channel as SendableChannels;
   }
 
-  private getLogMessagesByType(type: keyof typeof AutomodLogMessages) {
+  private getLogMessagesByType(type: ObjectKeys<typeof AutomodLogMessages>) {
     return AutomodLogMessages[type];
   }
 }

@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import { dirname,importx } from "@discordx/importer";
+import { dirname, importx } from "@discordx/importer";
 import type { Interaction, Message } from "discord.js";
 import { GatewayIntentBits } from "discord.js";
 import { Client, DIService, tsyringeDependencyRegistryEngine } from "discordx";

@@ -1,7 +1,6 @@
-import { type Snowflake,userMention } from "discord.js";
+import type { AutomodResponse, AutomodRule } from "@automod/types";
+import { type Snowflake, userMention } from "discord.js";
 import { injectable } from "tsyringe";
-
-import type { AutomodResponse, AutomodRule } from "./automod.types.js";
 
 type UserViolations = Record<Snowflake, Partial<Record<AutomodRule, number>>>;
 

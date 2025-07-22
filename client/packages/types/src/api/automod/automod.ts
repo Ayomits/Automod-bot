@@ -1,4 +1,4 @@
-import type { LiteralEnum } from "@ts-fetcher/types";
+import type { LiteralEnum } from "@/utlity";
 import type { Snowflake } from "discord.js";
 
 export interface AutomodMessage {
