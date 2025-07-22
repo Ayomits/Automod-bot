@@ -1,6 +1,9 @@
-from .toxicity import RussianToxicityML, toxicity_ml
+from .toxicity_service import RussianToxicityML
+from .ml_service import ml_service, MLService
 
 __all__ = (
     "RussianToxicityML",
-    "toxicity_ml"
+
+    "ml_service",
+    "MLService"
 )

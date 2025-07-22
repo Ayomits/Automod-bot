@@ -16,5 +16,3 @@ class RussianToxicityML:
             logits = self.__model(batch).logits
             proba = sigmoid(logits).cpu().numpy()[0][0]
         return float(proba)
-
-toxicity_ml = RussianToxicityML()

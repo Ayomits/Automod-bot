@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from .regex import MessageCleanUp
+from .message_clean_up import MessageCleanUpService
 
 class MaxMessageLengthOptions(BaseModel):
     max_message_length: int
@@ -12,7 +12,7 @@ class MaxMessageTrigger(BaseModel):
 
 default_options = MaxMessageLengthOptions(max_message_length=256, max_word_length=32)
 
-class MaxMessageLength:
+class MaxMessageLengthAutomodSercice:
     __options: MaxMessageLengthOptions
 
     def __init__(self, options: MaxMessageLengthOptions = default_options):
@@ -21,7 +21,7 @@ class MaxMessageLength:
     def analyze(self, content: str, return_raw = False):
         sliced_message = content[slice(0, self.__options.max_message_length)]
         ## TODO: move to service
-        splited_message = MessageCleanUp.clean_up(content=content, return_string=True)
+        splited_message = MessageCleanUpService.clean_up(content=content, return_string=True)
         is_max_message_matched = len(content) > self.__options.max_message_length
         if is_max_message_matched:
             if return_raw:

@@ -1,7 +1,6 @@
-from regex import findall
 from pydantic import BaseModel, NonNegativeInt
 from enum import Enum
-from .regex import MessageCleanUp
+from .message_clean_up import MessageCleanUpService
 
 class CapsLockOptions(BaseModel):
     """Для обычного капс лока"""
@@ -20,15 +19,15 @@ class CapsLockType(Enum):
     Default = "default"
     Mixed = "mixed"
 
-class CapsLock:
+class CapsLockAutomodService:
     __options: CapsLockOptions
 
     def __init__(self, options: CapsLockOptions = default_options):
         self.__options=default_options.copy(update=options.dict())
 
     def analyze(self, content: str, type: CapsLockType = CapsLockType.Default.value) -> bool:
-        all_caps_symbols = MessageCleanUp.caps_symbols(content=content, return_string=True)
-        all_symbols = MessageCleanUp.clean_up(content=content, return_string=True)
+        all_caps_symbols = MessageCleanUpService.caps_symbols(content=content, return_string=True)
+        all_symbols = MessageCleanUpService.clean_up(content=content, return_string=True)
 
         all_caps_length = len(all_caps_symbols)
         all_symbols_length = len(all_symbols) if len(all_symbols) != 0 else 1
@@ -48,8 +47,8 @@ class CapsLock:
             return percantage >= self.__options.mixed_words_trigger_percentage
 
     def __filter_mixed_words(self, i: int, word: str, self_arr: list[str], once = False) -> bool:
-        all_symbols = MessageCleanUp.clean_up(content=word)
-        all_caps_symbols = MessageCleanUp.caps_symbols(content=word)
+        all_symbols = MessageCleanUpService.clean_up(content=word)
+        all_caps_symbols = MessageCleanUpService.caps_symbols(content=word)
         all_caps_length = len(all_caps_symbols)
         all_symbols_length = len(all_symbols) if len(all_symbols) != 0 else 1
 

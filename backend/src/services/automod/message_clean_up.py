@@ -1,6 +1,6 @@
 from regex import findall
 
-class MessageCleanUp:
+class MessageCleanUpService:
   @staticmethod
   def clean_up(content: str, return_string = False):
     list = findall(r'[A-ZЁА-Яa-zёа-я]', content)

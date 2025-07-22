@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from uvicorn import run
 from dotenv import load_dotenv
-from lib import config_service
+from utils import config_service
 from routers import automod_router
 
 load_dotenv()

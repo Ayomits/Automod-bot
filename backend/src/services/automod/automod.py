@@ -1,7 +1,7 @@
-from .caps_lock import CapsLock, CapsLockType
-from .max_message_length import MaxMessageLength
+from .caps_lock import CapsLockAutomodService, CapsLockType
+from .max_message_length import MaxMessageLengthAutomodSercice
 from .rules import AutomodRules
-from .toxicity import Toxicity
+from .toxicity import ToxicityService
 from pydantic import BaseModel
 from schemas import AutomodRequestSchema, AutomodResponseSchema, AutomodMatch, AutomodMessage
 
@@ -9,11 +9,11 @@ class AutomodRule(BaseModel):
     matched: bool
     rules: list[str]
 
-class Automod:
+class AutomodService:
 
-    __capslock = CapsLock()
-    __max_message_length = MaxMessageLength()
-    __toxicity_analyzer = Toxicity()
+    __capslock = CapsLockAutomodService()
+    __max_message_length = MaxMessageLengthAutomodSercice()
+    __toxicity_analyzer = ToxicityService()
 
     __automod_rules = [rule.value for rule in AutomodRules]
 
