@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       ts-fetcher:
-        specifier: link:../.local/share/pnpm/global/5/node_modules/ts-fetcher
-        version: link:../.local/share/pnpm/global/5/node_modules/ts-fetcher
+        specifier: link:../../../.local/share/pnpm/global/5/node_modules/ts-fetcher
+        version: link:../../../.local/share/pnpm/global/5/node_modules/ts-fetcher
     devDependencies:
       '@changesets/cli':
         specifier: ^2.29.5
