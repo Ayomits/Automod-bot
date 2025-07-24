@@ -6,9 +6,9 @@ import type {
 } from "@automod/types";
 import type {
   Guild,
-  MessageCreateOptions,
-  MessagePayload,
+  Message,
   SendableChannels,
+  User,
 } from "discord.js";
 import { EmbedBuilder } from "discord.js";
 import { injectable } from "tsyringe";
@@ -17,27 +17,42 @@ import { AutomodLogMessages } from "../../../messages/automod.messages.js";
 
 @injectable()
 export class AutomodLogService {
-  public async execute(response: AutomodResponse, guild: Guild) {
+  public async sendLogs(response: AutomodResponse, msg: Message) {
+    const guild = msg.guild!;
+    await Promise.allSettled([
+      this.sendDmLog(response, guild, msg.author),
+      this.sendGuildLog(response, guild),
+    ]);
+  }
+
+  public async sendGuildLog(response: AutomodResponse, guild: Guild) {
     const resolvedMatches = this.resolveMatches(guild, response.matches);
     const channel = await this.getLogChannel(guild);
     resolvedMatches.forEach((resolved, idx) => {
       setTimeout(() => {
-        this.sendLogs(channel, {
-          embeds: resolved,
-        });
+        try {
+          channel.send({
+            embeds: resolved,
+          });
+        } catch {
+          return;
+        }
       }, 1_000 * idx);
     });
   }
 
-  private sendLogs(
-    channel: SendableChannels,
-    options: MessagePayload | MessageCreateOptions,
-  ) {
-    try {
-      channel.send(options);
-    } catch (err) {
-      console.error(err);
-    }
+  public async sendDmLog(response: AutomodResponse, guild: Guild, user: User) {
+    const resolvedMatches = this.resolveMatches(guild, response.matches);
+    resolvedMatches.forEach((resolved, idx) => {
+      setTimeout(() => {
+        try {
+          // TODO: разделить отчёты
+          user.send({ embeds: resolved });
+        } catch {
+          return;
+        }
+      }, 1_000 * idx);
+    });
   }
 
   private resolveMatches(guild: Guild, matches: AutomodMatch[]) {

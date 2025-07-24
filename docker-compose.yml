@@ -12,10 +12,6 @@ services:
     environment:
       - APP_ENV=${APP_ENV}
       - DATABASE_URL="postgres://automod-postgres@postgres"
-    develop:
-      watch:
-        - action: rebuild
-          path: ./backend
 
   automod-bot:
     container_name: automod-bot
@@ -42,6 +38,7 @@ services:
       - postgres_data:/pgdata
     ports:
       - "5432:5432"
+
 volumes:
   postgres_data:
     driver: local

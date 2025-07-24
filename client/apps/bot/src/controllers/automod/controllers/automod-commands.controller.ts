@@ -22,8 +22,6 @@ import {
 } from "discordx";
 import { inject, singleton } from "tsyringe";
 
-import { DevOnly } from "@/guards/dev-only.guard.js";
-
 import { ContextCommandAnalyzeMessage } from "../../../messages/automod.messages.js";
 import { AutomodAnalyzeService } from "../services/analyze.service.js";
 
@@ -32,7 +30,7 @@ import { AutomodAnalyzeService } from "../services/analyze.service.js";
 export class AutomodContextAnalyzeController {
   constructor(
     @inject(AutomodAnalyzeService)
-    private automodAnalyzer: AutomodAnalyzeService,
+    private automodAnalyzer: AutomodAnalyzeService
   ) {}
 
   @ContextMenu({
@@ -40,16 +38,15 @@ export class AutomodContextAnalyzeController {
     type: ApplicationCommandType.Message,
   })
   @Guard(
-    DevOnly,
     RateLimit(TIME_UNIT.seconds, 5, {
       ephemeral: true,
       rateValue: 1,
       message(_, timeLeft) {
         return ContextCommandAnalyzeMessage.validation.rate(
-          (timeLeft / 1000).toFixed(1),
+          (timeLeft / 1000).toFixed(1)
         );
       },
-    }),
+    })
   )
   analyzeLastUserMessage(interaction: MessageContextMenuCommandInteraction) {
     return this.automodAnalyzer.analyzeLastUserMessageContext(interaction);
@@ -60,16 +57,15 @@ export class AutomodContextAnalyzeController {
     type: ApplicationCommandType.User,
   })
   @Guard(
-    DevOnly,
     RateLimit(TIME_UNIT.seconds, 5, {
       ephemeral: true,
       rateValue: 1,
       message(_, timeLeft) {
         return ContextCommandAnalyzeMessage.validation.rate(
-          (timeLeft / 1000).toFixed(1),
+          (timeLeft / 1000).toFixed(1)
         );
       },
-    }),
+    })
   )
   analyzeLastUserMessages(interaction: UserContextMenuCommandInteraction) {
     return this.automodAnalyzer.analyzeLastUserMessagesContext(interaction);
@@ -85,15 +81,14 @@ export class AutomodContextAnalyzeController {
     description: "Automod analyze user messages",
   })
   @Guard(
-    DevOnly,
     RateLimit(TIME_UNIT.seconds, 30, {
       rateValue: 1,
       message(_, timeLeft) {
         return ContextCommandAnalyzeMessage.validation.rate(
-          (timeLeft / 1000).toFixed(1),
+          (timeLeft / 1000).toFixed(1)
         );
       },
-    }),
+    })
   )
   message(
     @SlashOption({
@@ -120,13 +115,13 @@ export class AutomodContextAnalyzeController {
       channelTypes: [ChannelType.GuildText],
     })
     channel: TextChannel,
-    interaction: CommandInteraction,
+    interaction: CommandInteraction
   ) {
     return this.automodAnalyzer.analyzeLastUserMessagesSlash(
       interaction,
       limit,
       user,
-      channel,
+      channel
     );
   }
 }

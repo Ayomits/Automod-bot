@@ -29,7 +29,7 @@ export class AlgsAutomodService {
     });
 
     if (automodChecks?.success && automodChecks?.data?.matches.length) {
-      this.automodLogService.execute(automodChecks.data, msg.guild);
+      this.automodLogService.sendGuildLog(automodChecks.data, msg.guild);
     }
     return;
   }

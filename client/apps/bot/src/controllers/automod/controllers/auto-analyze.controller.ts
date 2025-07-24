@@ -10,7 +10,7 @@ export class AutoAnalyzeController {
   constructor(
     @inject(AIAutoAnalyzeService)
     private aiAutomodService: AIAutoAnalyzeService,
-    @inject(AlgsAutomodService) private algsAutomodService: AlgsAutomodService,
+    @inject(AlgsAutomodService) private algsAutomodService: AlgsAutomodService
   ) {}
 
   @On({ event: "messageCreate" })
