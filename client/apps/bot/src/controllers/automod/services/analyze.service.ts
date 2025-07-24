@@ -31,17 +31,41 @@ export class AutomodAnalyzeService {
   constructor(@inject(AutomodApi) private automodApi: AutomodApi) {}
 
   async analyzeLastUserMessageContext(
-    interaction: MessageContextMenuCommandInteraction,
+    interaction: MessageContextMenuCommandInteraction
   ) {
     await interaction.deferReply({ ephemeral: true });
+    const avatar = UsersUtility.getAvatar(interaction.targetMessage.author);
+    const username = UsersUtility.getUsername(interaction.targetMessage.author);
+    const baseEmbed = new EmbedBuilder()
+      .setTitle(ContextCommandAnalyzeMessage.validation.title)
+      .setThumbnail(avatar)
+      .setFooter({
+        iconURL: avatar,
+        text: username,
+      });
+    await interaction.followUp({
+      embeds: [
+        baseEmbed
+          .setTitle(ContextCommandAnalyzeMessage.awaiting.title(username))
+          .setDescription(ContextCommandAnalyzeMessage.awaiting.description),
+      ],
+    });
     if (interaction.targetMessage.author.bot) {
       return await interaction.editReply({
-        content: ContextCommandAnalyzeMessage.validation.bot,
+        embeds: [
+          baseEmbed
+            .setTitle(ContextCommandAnalyzeMessage.validation.title)
+            .setDescription(ContextCommandAnalyzeMessage.validation.bot),
+        ],
       });
     }
     if (!interaction.targetMessage.content) {
       return await interaction.editReply({
-        content: ContextCommandAnalyzeMessage.validation.empty,
+        embeds: [
+          baseEmbed
+            .setTitle(ContextCommandAnalyzeMessage.validation.title)
+            .setDescription(ContextCommandAnalyzeMessage.validation.empty),
+        ],
       });
     }
     const analytics = await this.automodApi.automod({
@@ -54,24 +78,38 @@ export class AutomodAnalyzeService {
       ],
     });
     if (!analytics) {
-      return interaction.editReply({
-        content: ContextCommandAnalyzeMessage.validation.internal,
+      return await interaction.editReply({
+        embeds: [
+          baseEmbed
+            .setTitle(ContextCommandAnalyzeMessage.validation.title)
+            .setDescription(ContextCommandAnalyzeMessage.validation.internal),
+        ],
       });
     }
     if (!analytics.success) {
-      return interaction.editReply({
-        content: ContextCommandAnalyzeMessage.validation.request,
+      return await interaction.editReply({
+        embeds: [
+          baseEmbed
+            .setTitle(ContextCommandAnalyzeMessage.validation.title)
+            .setDescription(ContextCommandAnalyzeMessage.validation.request),
+        ],
       });
     }
     const analyzeExplainer = new AutomodAnalyzeExplanaition();
-    const text = analyzeExplainer.explain(analytics.data).toText();
+    const explaination = analyzeExplainer.explain(analytics.data).toText();
     return interaction.editReply({
-      content: text,
+      embeds: [
+        baseEmbed
+          .setTitle(ContextCommandAnalyzeMessage.success.title)
+          .setDescription(
+            ContextCommandAnalyzeMessage.success.description(explaination)
+          ),
+      ],
     });
   }
 
   async analyzeLastUserMessagesContext(
-    interaction: UserContextMenuCommandInteraction,
+    interaction: UserContextMenuCommandInteraction
   ) {
     const modal = new ModalBuilder()
       .setTitle("Анализ последних сообщений пользователя")
@@ -85,7 +123,7 @@ export class AutomodAnalyzeService {
         .setValue(interaction.targetUser.id)
         .setMaxLength(19)
         .setMinLength(17)
-        .setStyle(TextInputStyle.Short),
+        .setStyle(TextInputStyle.Short)
     );
 
     const limit = new ActionRowBuilder<TextInputBuilder>().addComponents(
@@ -96,7 +134,7 @@ export class AutomodAnalyzeService {
         .setValue("10")
         .setMaxLength(2)
         .setMinLength(2)
-        .setStyle(TextInputStyle.Short),
+        .setStyle(TextInputStyle.Short)
     );
 
     modal.addComponents(usrId, limit);
@@ -120,10 +158,10 @@ export class AutomodAnalyzeService {
         embeds: [
           baseEmbed
             .setTitle(
-              ContextCommandAnalyzeLastUserMessages.validation.User.title,
+              ContextCommandAnalyzeLastUserMessages.validation.User.title
             )
             .setDescription(
-              ContextCommandAnalyzeLastUserMessages.validation.User.description,
+              ContextCommandAnalyzeLastUserMessages.validation.User.description
             )
             .setThumbnail(authorAvatar)
             .setFooter({ iconURL: authorAvatar, text: authorUsername }),
@@ -144,7 +182,7 @@ export class AutomodAnalyzeService {
           baseEmbed
             .setTitle(ContextCommandAnalyzeLastUserMessages.validation.Title)
             .setDescription(
-              ContextCommandAnalyzeLastUserMessages.validation.Bot,
+              ContextCommandAnalyzeLastUserMessages.validation.Bot
             ),
         ],
       });
@@ -156,7 +194,7 @@ export class AutomodAnalyzeService {
           baseEmbed
             .setTitle(ContextCommandAnalyzeLastUserMessages.validation.Title)
             .setDescription(
-              ContextCommandAnalyzeLastUserMessages.validation.ChannelType,
+              ContextCommandAnalyzeLastUserMessages.validation.ChannelType
             ),
         ],
       });
@@ -181,12 +219,12 @@ export class AutomodAnalyzeService {
       embeds: [
         baseEmbed
           .setTitle(
-            ContextCommandAnalyzeLastUserMessages.awaiting.title(usrUsername),
+            ContextCommandAnalyzeLastUserMessages.awaiting.title(usrUsername)
           )
           .setDescription(
             ContextCommandAnalyzeLastUserMessages.awaiting.description(
-              warnMessage,
-            ),
+              warnMessage
+            )
           ),
       ],
     });
@@ -195,7 +233,7 @@ export class AutomodAnalyzeService {
       const explaination = await this.analyzeLastMessagesInChannel(
         interaction.channel,
         usrId,
-        limit,
+        limit
       );
 
       return interaction.editReply({
@@ -204,8 +242,8 @@ export class AutomodAnalyzeService {
             .setTitle(ContextCommandAnalyzeLastUserMessages.success.title)
             .setDescription(
               ContextCommandAnalyzeLastUserMessages.success.description(
-                explaination,
-              ),
+                explaination
+              )
             ),
         ],
       });
@@ -215,7 +253,7 @@ export class AutomodAnalyzeService {
           baseEmbed
             .setTitle(ContextCommandAnalyzeLastUserMessages.failure.title)
             .setDescription(
-              ContextCommandAnalyzeLastUserMessages.failure.description,
+              ContextCommandAnalyzeLastUserMessages.failure.description
             ),
         ],
       });
@@ -227,7 +265,7 @@ export class AutomodAnalyzeService {
     interaction: CommandInteraction,
     limit: number,
     user: User,
-    channel: TextChannel,
+    channel: TextChannel
   ) {
     channel =
       typeof channel !== "undefined"
@@ -248,7 +286,7 @@ export class AutomodAnalyzeService {
           baseEmbed
             .setTitle(ContextCommandAnalyzeLastUserMessages.validation.Title)
             .setDescription(
-              ContextCommandAnalyzeLastUserMessages.validation.Bot,
+              ContextCommandAnalyzeLastUserMessages.validation.Bot
             ),
         ],
       });
@@ -258,7 +296,7 @@ export class AutomodAnalyzeService {
       const explaination = await this.analyzeLastMessagesInChannel(
         channel,
         user.id,
-        limit,
+        limit
       );
 
       return interaction.editReply({
@@ -267,8 +305,8 @@ export class AutomodAnalyzeService {
             .setTitle(ContextCommandAnalyzeLastUserMessages.success.title)
             .setDescription(
               ContextCommandAnalyzeLastUserMessages.success.description(
-                explaination,
-              ),
+                explaination
+              )
             ),
         ],
       });
@@ -278,7 +316,7 @@ export class AutomodAnalyzeService {
           baseEmbed
             .setTitle(ContextCommandAnalyzeLastUserMessages.failure.title)
             .setDescription(
-              ContextCommandAnalyzeLastUserMessages.failure.description,
+              ContextCommandAnalyzeLastUserMessages.failure.description
             ),
         ],
       });
@@ -289,12 +327,12 @@ export class AutomodAnalyzeService {
   private async analyzeLastMessagesInChannel(
     channel: TextChannel,
     userId: Snowflake,
-    limit: number,
+    limit: number
   ) {
     const apiMessages = await this.collectMessagesToAnalyze(
       channel,
       userId,
-      limit,
+      limit
     );
 
     const explaination = new AutomodAnalyzeExplanaition();
@@ -305,7 +343,7 @@ export class AutomodAnalyzeService {
   private async collectMessagesToAnalyze(
     channel: TextChannel,
     userId: Snowflake,
-    limit: number,
+    limit: number
   ) {
     const apiMessages: AutomodMessage[] = [];
     let before: string | undefined = undefined;
