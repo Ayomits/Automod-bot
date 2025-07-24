@@ -8,49 +8,57 @@ export const AutomodWarningMessageExplanaition = {
 } as const;
 
 export const AutomodLogMessages = {
-  [AutomodRule.Caps]: {
-    title: "Превышение лимит верхнего регистра в тексте",
-    description: (match: AutomodMatch) =>
-      `${userMention(match.user_id)} превысил лимит верхнего регистра в сообщении`,
-    fields: (match: AutomodMatch) => [
-      {
-        name: "Контент",
-        value: codeBlock(match.content),
-      },
-    ],
-  },
-  [AutomodRule.CapsMixed]: {
-    title: "Превышение лимит комбинированного верхнего регистра в тексте",
-    description: (match: AutomodMatch) =>
-      `${userMention(match.user_id)} превысил лимит комбинированного верхнего регистра в сообщении`,
-    fields: (match: AutomodMatch) => [
-      {
-        name: "Контент",
-        value: codeBlock(match.content),
-      },
-    ],
-  },
-  [AutomodRule.Toxicity]: {
-    title: "Токсичность (нейросетевой анализ)",
-    description: (match: AutomodMatch) =>
-      `${userMention(match.user_id)} проявил токсичность в своём сообщении`,
-    fields: (match: AutomodMatch) => [
-      {
-        name: "Контент",
-        value: codeBlock(match.content),
-      },
-    ],
-  },
-  [AutomodRule.MessageMaxLength]: {
-    title: "Превышение лимит символов в тексте",
-    description: (match: AutomodMatch) =>
-      `${userMention(match.user_id)} превысил лимит символов в сообщении`,
-    fields: (match: AutomodMatch) => [
-      {
-        name: "Контент",
-        value: codeBlock(match.content),
-      },
-    ],
+  logging: {
+    [AutomodRule.Caps]: {
+      title: "Превышение лимит верхнего регистра в тексте",
+      description: (match: AutomodMatch) =>
+        `${userMention(match.user_id)} превысил лимит верхнего регистра в сообщении`,
+      fields: (match: AutomodMatch) => [
+        {
+          name: "Контент",
+          value: codeBlock(match.content),
+          inline: true,
+        },
+        {
+          name: "Санкция",
+          value: codeBlock(`Нет`),
+          inline: true,
+        },
+      ],
+    },
+    [AutomodRule.CapsMixed]: {
+      title: "Превышение лимит комбинированного верхнего регистра в тексте",
+      description: (match: AutomodMatch) =>
+        `${userMention(match.user_id)} превысил лимит комбинированного верхнего регистра в сообщении`,
+      fields: (match: AutomodMatch) => [
+        {
+          name: "Контент",
+          value: codeBlock(match.content),
+        },
+      ],
+    },
+    [AutomodRule.Toxicity]: {
+      title: "Токсичность (нейросетевой анализ)",
+      description: (match: AutomodMatch) =>
+        `${userMention(match.user_id)} проявил токсичность в своём сообщении`,
+      fields: (match: AutomodMatch) => [
+        {
+          name: "Контент",
+          value: codeBlock(match.content),
+        },
+      ],
+    },
+    [AutomodRule.MessageMaxLength]: {
+      title: "Превышение лимит символов в тексте",
+      description: (match: AutomodMatch) =>
+        `${userMention(match.user_id)} превысил лимит символов в сообщении`,
+      fields: (match: AutomodMatch) => [
+        {
+          name: "Контент",
+          value: codeBlock(match.content),
+        },
+      ],
+    },
   },
 } as const;
 

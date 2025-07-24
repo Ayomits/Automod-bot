@@ -5,7 +5,7 @@ export class LocalCache<
   K extends string = string,
   V = any,
 > extends LocalCacheRest<K, V> {
-  getAll() {
+  raw() {
     return this.cache;
   }
 }

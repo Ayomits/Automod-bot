@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       ts-fetcher:
-        specifier: link:../../../.local/share/pnpm/global/5/node_modules/ts-fetcher
-        version: link:../../../.local/share/pnpm/global/5/node_modules/ts-fetcher
+        specifier: link:../.local/share/pnpm/global/5/node_modules/ts-fetcher
+        version: link:../.local/share/pnpm/global/5/node_modules/ts-fetcher
     devDependencies:
       '@changesets/cli':
         specifier: ^2.29.5
@@ -42,9 +42,6 @@ importers:
 
   apps/bot:
     dependencies:
-      '@automod/api':
-        specifier: workspace:^
-        version: link:../../packages/api
       '@automod/config':
         specifier: workspace:^
         version: link:../../packages/config
@@ -58,8 +55,8 @@ importers:
         specifier: ^7.0.5
         version: 7.0.5(discord.js@14.21.0)(discordx@11.12.5(discord.js@14.21.0))
       '@ts-fetcher/cache':
-        specifier: ^1.3.3
-        version: 1.3.3
+        specifier: ^1.4.1
+        version: 1.4.1
       '@ts-fetcher/rest':
         specifier: ^1.3.5
         version: 1.3.5
@@ -92,8 +89,8 @@ importers:
         specifier: ^9.30.1
         version: 9.31.0
       '@ts-fetcher/types':
-        specifier: ^1.4.0
-        version: 1.4.0
+        specifier: ^1.4.1
+        version: 1.4.1
       '@types/node':
         specifier: ^24.0.12
         version: 24.0.14
@@ -127,70 +124,6 @@ importers:
       tsc-alias:
         specifier: ^1.8.16
         version: 1.8.16
-      typescript:
-        specifier: ^5.8.3
-        version: 5.8.3
-      vitest:
-        specifier: ^3.2.4
-        version: 3.2.4(@types/node@24.0.14)(terser@5.43.1)
-
-  packages/api:
-    dependencies:
-      '@automod/config':
-        specifier: workspace:^
-        version: link:../config
-      '@ts-fetcher/cache':
-        specifier: ^1.3.3
-        version: 1.3.3
-      '@ts-fetcher/rest':
-        specifier: ^1.3.5
-        version: 1.3.5
-      discord.js:
-        specifier: ^14.21.0
-        version: 14.21.0
-      tsyringe:
-        specifier: ^4.10.0
-        version: 4.10.0
-    devDependencies:
-      '@automod/types':
-        specifier: workspace:^
-        version: link:../types
-      '@eslint/eslintrc':
-        specifier: ^3.3.1
-        version: 3.3.1
-      '@eslint/js':
-        specifier: ^9.30.1
-        version: 9.31.0
-      '@ts-fetcher/types':
-        specifier: ^1.4.0
-        version: 1.4.0
-      '@types/node':
-        specifier: ^24.0.12
-        version: 24.0.14
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^8.36.0
-        version: 8.37.0(@typescript-eslint/parser@8.37.0(eslint@9.31.0)(typescript@5.8.3))(eslint@9.31.0)(typescript@5.8.3)
-      '@typescript-eslint/parser':
-        specifier: ^8.36.0
-        version: 8.37.0(eslint@9.31.0)(typescript@5.8.3)
-      esbuild-plugin-version-injector:
-        specifier: ^1.2.1
-        version: 1.2.1
-      eslint:
-        specifier: ^9.30.1
-        version: 9.31.0
-      eslint-plugin-simple-import-sort:
-        specifier: ^12.1.1
-        version: 12.1.1(eslint@9.31.0)
-      globals:
-        specifier: ^16.3.0
-        version: 16.3.0
-      prettier:
-        specifier: ^3.6.2
-        version: 3.6.2
-      tsup:
-        specifier: ^8.5.0
-        version: 8.5.0(postcss@8.5.6)(typescript@5.8.3)
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -815,14 +748,14 @@ packages:
     resolution: {integrity: sha512-jjmJywLAFoWeBi1W7994zZyiNWPIiqRRNAmSERxyg93xRGzNYvGjlZ0gR6x0F4gPRi2+0O6S71kOZYyr3cxaIQ==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
 
-  '@ts-fetcher/cache@1.3.3':
-    resolution: {integrity: sha512-C2NS6+FFCWYT4wt/l6JX+ietUEoZoezMiYrrToL8yuE9OnN82ybKAIhh0ZW/3Gpgj5I8o0pNv3zJeKK0At+GqA==}
+  '@ts-fetcher/cache@1.4.1':
+    resolution: {integrity: sha512-TopULR4MYHP36eXykpk8fdem+P9qJbK8uqAFU/94vcS3o3Bwx7+pKs8F6YJdogCJz/fFUDqXpH8RdvPK+7u5Ag==}
 
   '@ts-fetcher/rest@1.3.5':
     resolution: {integrity: sha512-BYuC+Hk0B35FzHT1kMd9q8uqxXsCzgh2KxgSrfFWTOTTYDGqz2WS7LFvUgiqS/Cz2oAgfmWaawiYIt+UA2zYlA==}
 
-  '@ts-fetcher/types@1.4.0':
-    resolution: {integrity: sha512-upSXVX/eBW4XNdOcCSZDS4If21EUyzzxIU8e1cLYOdIDBiDLmeXxl63Xx5h9bnNE0p1hyNldE8wKmy2TjMzzBw==}
+  '@ts-fetcher/types@1.4.1':
+    resolution: {integrity: sha512-tcrTAcQb8JNZJI68wnISAEWIOkSvBYRlbBtRg5fVnv9RtD9wYgYZQ5cnczEp6lOf8rAKz2L7sEU7+5w7h+ZnPw==}
 
   '@types/chai@5.2.2':
     resolution: {integrity: sha512-8kB30R7Hwqf40JPiKhVzodJs2Qc1ZJ5zuT3uzw5Hq/dhNCl3G3l83jfpdI1e20BP348+fV7VIL/+FxaXkqBmWg==}
@@ -2679,11 +2612,11 @@ snapshots:
 
   '@sapphire/snowflake@3.5.3': {}
 
-  '@ts-fetcher/cache@1.3.3': {}
+  '@ts-fetcher/cache@1.4.1': {}
 
   '@ts-fetcher/rest@1.3.5': {}
 
-  '@ts-fetcher/types@1.4.0': {}
+  '@ts-fetcher/types@1.4.1': {}
 
   '@types/chai@5.2.2':
     dependencies:
