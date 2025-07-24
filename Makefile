@@ -31,18 +31,8 @@ down:
 down_force:
 	docker compose down -v --rmi=all --remove-orphans
 
-install_deps_backend:
-	cd backend
-	poetry install
+console_backend:
+	docker exec -it automod-backend sh
 
-install_deps_client:
-	cd client
-	pnpm install
-
-install_dep_backend:
-	cd backend
-	poetry add
-
-install_dep_client:
-	cd client
-	pnpm add
+console_bot:
+	docker exec -it automod-bot sh

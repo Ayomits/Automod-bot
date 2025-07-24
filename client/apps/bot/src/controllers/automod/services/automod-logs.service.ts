@@ -4,14 +4,11 @@ import type {
   AutomodRule,
   ObjectKeys,
 } from "@automod/types";
-import type {
-  Guild,
-  Message,
-  SendableChannels,
-  User,
-} from "discord.js";
+import type { Guild, Message, SendableChannels, User } from "discord.js";
 import { EmbedBuilder } from "discord.js";
 import { injectable } from "tsyringe";
+
+import { TempConfig } from "@/const/temp-config.js";
 
 import { AutomodLogMessages } from "../../../messages/automod.messages.js";
 
@@ -27,7 +24,7 @@ export class AutomodLogService {
 
   public async sendGuildLog(response: AutomodResponse, guild: Guild) {
     const resolvedMatches = this.resolveMatches(guild, response.matches);
-    const channel = await this.getLogChannel(guild);
+    const channel = await this.fetchLogChannel(guild);
     resolvedMatches.forEach((resolved, idx) => {
       setTimeout(() => {
         try {
@@ -81,17 +78,22 @@ export class AutomodLogService {
     return embeds;
   }
 
-  private async getLogChannel(guild: Guild) {
-    const channel = await guild.channels.fetch("1396851019719376916", {
-      cache: true,
-    });
+  private async fetchLogChannel(guild: Guild) {
+    // TODO: normal implementation of settings
+    const channel = await guild.channels
+      .fetch(TempConfig.logging, {
+        cache: true,
+      })
+      .catch(console.error);
     if (!channel) {
       throw new Error("Log channel does not exists");
     }
     return channel as SendableChannels;
   }
 
-  private getLogMessagesByType(type: ObjectKeys<typeof AutomodLogMessages>) {
-    return AutomodLogMessages[type];
+  private getLogMessagesByType(
+    type: ObjectKeys<(typeof AutomodLogMessages)["logging"]>,
+  ) {
+    return AutomodLogMessages.logging?.[type];
   }
 }

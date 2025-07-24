@@ -30,7 +30,7 @@ import { AutomodAnalyzeService } from "../services/analyze.service.js";
 export class AutomodContextAnalyzeController {
   constructor(
     @inject(AutomodAnalyzeService)
-    private automodAnalyzer: AutomodAnalyzeService
+    private automodAnalyzer: AutomodAnalyzeService,
   ) {}
 
   @ContextMenu({
@@ -43,10 +43,10 @@ export class AutomodContextAnalyzeController {
       rateValue: 1,
       message(_, timeLeft) {
         return ContextCommandAnalyzeMessage.validation.rate(
-          (timeLeft / 1000).toFixed(1)
+          (timeLeft / 1000).toFixed(1),
         );
       },
-    })
+    }),
   )
   analyzeLastUserMessage(interaction: MessageContextMenuCommandInteraction) {
     return this.automodAnalyzer.analyzeLastUserMessageContext(interaction);
@@ -62,10 +62,10 @@ export class AutomodContextAnalyzeController {
       rateValue: 1,
       message(_, timeLeft) {
         return ContextCommandAnalyzeMessage.validation.rate(
-          (timeLeft / 1000).toFixed(1)
+          (timeLeft / 1000).toFixed(1),
         );
       },
-    })
+    }),
   )
   analyzeLastUserMessages(interaction: UserContextMenuCommandInteraction) {
     return this.automodAnalyzer.analyzeLastUserMessagesContext(interaction);
@@ -85,10 +85,10 @@ export class AutomodContextAnalyzeController {
       rateValue: 1,
       message(_, timeLeft) {
         return ContextCommandAnalyzeMessage.validation.rate(
-          (timeLeft / 1000).toFixed(1)
+          (timeLeft / 1000).toFixed(1),
         );
       },
-    })
+    }),
   )
   message(
     @SlashOption({
@@ -115,13 +115,13 @@ export class AutomodContextAnalyzeController {
       channelTypes: [ChannelType.GuildText],
     })
     channel: TextChannel,
-    interaction: CommandInteraction
+    interaction: CommandInteraction,
   ) {
     return this.automodAnalyzer.analyzeLastUserMessagesSlash(
       interaction,
       limit,
       user,
-      channel
+      channel,
     );
   }
 }
