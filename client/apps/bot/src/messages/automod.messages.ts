@@ -63,6 +63,16 @@ export const AutomodLogMessages = {
 } as const;
 
 export const ContextCommandAnalyzeMessage = {
+  awaiting: {
+    title: (username: string) =>
+      `Система анализирует сообщение пользователя ${username}...`,
+    description: "Пожалуйста подождите...",
+  },
+  success: {
+    title: "Анализ успешно завершён",
+    description: (explaination: string) =>
+      [bold("Результаты анализа:"), explaination].join("\n"),
+  },
   validation: {
     title: "Ошибка...",
     bot: "Невозможно проанализировать сообщение от бота",
