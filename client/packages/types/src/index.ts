@@ -1,3 +1,3 @@
-export * from "./api";
-export * from "./utlity";
-export * from "./config";
+export type * from "./api";
+export type * from "./utlity";
+export type * from "./config";

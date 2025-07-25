@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@automod/api",
+  "description": "Shared api classes for automod bot",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "pnpm@10.12.1",
+  "scripts": {
+    "format:fix": "npx prettier --write \"src/**/*.ts\"",
+    "format:check": "npx prettier --check \"src/**/*.ts\"",
+    "lint:check": "npx eslint src --ext .ts",
+    "lint:fix": "npx eslint src --ext .ts --fix",
+    "build": "tsup",
+    "pipeline": "pnpm run format:fix && pnpm run lint:fix && pnpm run build"
+  },
+  "repository": {
+    "url": "https://github.com/Ayomits/ts-fetch"
+  },
+  "dependencies": {
+    "@ts-fetcher/rest": "1.3.5",
+    "@ts-fetcher/types": "1.4.2",
+    "@ts-fetcher/cache": "1.4.1",
+    "@automod/config": "workspace:^",
+    "discord.js": "^14.21.0",
+    "tsyringe": "^4.10.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.30.1",
+    "@types/node": "^24.0.12",
+    "@automod/types": "workspace:^",
+    "@typescript-eslint/eslint-plugin": "^8.36.0",
+    "@typescript-eslint/parser": "^8.36.0",
+    "esbuild-plugin-version-injector": "^1.2.1",
+    "eslint": "^9.30.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^16.3.0",
+    "prettier": "^3.6.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "Ayomits"
+}
