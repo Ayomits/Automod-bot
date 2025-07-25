@@ -1,16 +1,23 @@
 import { AutomodApi } from "@automod/api";
 import type { AutomodMessage } from "@automod/types";
-import type { Message, Snowflake, TextChannel } from "discord.js";
+import type {
+  GuildChannel,
+  Message,
+  PartialMessage,
+  Snowflake,
+  TextChannel,
+} from "discord.js";
 import { Events } from "discord.js";
 import { inject, injectable } from "tsyringe";
 
 import { LocalCache } from "#cache/local.cache.js";
+import { ScheduleManager } from "#lib/schedule/schedule-manager.js";
 
 import { AutomodLogService } from "./automod-logs.service.js";
 
 const AI_MESSAGE_CACHE_KEYS_LIMIT = 10;
 const AI_ANALYSIS_TIMEOUT_DELAY = 10_000;
-const BULK_DELETE_TIMEOUT_DELAY = 5_000;
+const BULK_DELETE_TIMEOUT_DELAY = 3_000;
 
 // 1 - Channel id
 // 2 - Message id
@@ -25,51 +32,66 @@ interface GetMessagesOptions {
 
 @injectable()
 export class AutoAnalyzeAutomodService {
-  private aiMessageCache: LocalCache<CacheKey, AutomodMessage>;
-  // CHANNEL_ID-MESSAGE_ID
-  private algsMessageCache: LocalCache<CacheKey, Message>;
-
-  private aiTimeoutCache: LocalCache<Snowflake, NodeJS.Timeout>;
-  private algsTimeoutCache: LocalCache<Snowflake, NodeJS.Timeout>;
-
   constructor(
     @inject(AutomodApi) private automodApi: AutomodApi,
     @inject(AutomodLogService) private automodLogService: AutomodLogService,
-  ) {
-    this.aiMessageCache = new LocalCache();
-    this.aiTimeoutCache = new LocalCache();
-    this.algsMessageCache = new LocalCache();
-    this.algsTimeoutCache = new LocalCache();
-  }
+    @inject(ScheduleManager)
+    private aiTimeoutCache: ScheduleManager,
+    @inject(ScheduleManager)
+    private algsTimeoutCache: ScheduleManager,
+    @inject(LocalCache)
+    private aiMessageCache: LocalCache<CacheKey, AutomodMessage>,
+    @inject(LocalCache) private algsMessageCache: LocalCache<CacheKey, Message>
+  ) {}
 
+  // ==========HANDLERS==========
   async handleMessage(
-    msg: Message,
+    msg: Message | PartialMessage,
     eventType:
       | Events.MessageCreate
-      | Events.MessageUpdate = Events.MessageCreate,
+      | Events.MessageUpdate
+      | Events.MessageDelete = Events.MessageCreate
   ) {
-    if (msg.author.bot || !msg.guild || !msg.content) {
+    if (msg.author!.bot || !msg.guild || !msg.content) {
       return;
     }
 
     await Promise.all([
-      this.handleAIAnalysis(msg),
+      this.handleAIAnalysis(msg, eventType),
       this.handleAlgorithmicCheck(msg, eventType),
     ]);
   }
 
-  private async handleAIAnalysis(msg: Message) {
+  private async handleAIAnalysis(
+    msg: Message | PartialMessage,
+    eventType:
+      | Events.MessageCreate
+      | Events.MessageUpdate
+      | Events.MessageDelete
+  ) {
+    if (msg.partial || eventType === Events.MessageDelete) {
+      return this.removeAICacheMessage(msg as PartialMessage);
+    }
     this.pushAiCacheMessage(msg);
     const messages = this.getMessages(msg.channel.id, "AI", {
       returnValues: true,
     });
-    this.startAiAnalysis(msg, messages.length === AI_MESSAGE_CACHE_KEYS_LIMIT);
+    return this.startAiAnalysis(
+      msg,
+      messages.length === AI_MESSAGE_CACHE_KEYS_LIMIT
+    );
   }
 
   private async handleAlgorithmicCheck(
-    msg: Message,
-    eventType: Events.MessageCreate | Events.MessageUpdate,
+    msg: Message | PartialMessage,
+    eventType:
+      | Events.MessageCreate
+      | Events.MessageUpdate
+      | Events.MessageDelete
   ) {
+    if (msg.partial || eventType === Events.MessageDelete) {
+      return this.removeAlgsCacheMessage(msg as PartialMessage);
+    }
     const result = await this.automodApi.automodAlghorthimicRules({
       messages: [
         {
@@ -85,31 +107,30 @@ export class AutoAnalyzeAutomodService {
         this.pushAlgsCacheMessage(msg);
         this.startAlgsAnalysis(msg);
       }
-      setTimeout(() => {
-        this.automodLogService.sendGuildLog(result.data, msg.guild!);
-      }, 500);
+      this.automodLogService.sendGuildLog(
+        result.data,
+        msg.channel as GuildChannel
+      );
     }
   }
 
   //============STARTER=============
-  private async startAiAnalysis(msg: Message, force = false) {
-    return await this.scheduleJob(
-      msg.channel.id,
-      "AI",
-      async () => await this.processAiAnalysis(msg.channel as TextChannel),
-      AI_ANALYSIS_TIMEOUT_DELAY,
+  private startAiAnalysis(msg: Message, force = false) {
+    return this.aiTimeoutCache.set(msg.channel.id, {
+      callback: async () =>
+        await this.processAiAnalysis(msg.channel as TextChannel),
+      delay: AI_ANALYSIS_TIMEOUT_DELAY,
       force,
-    );
+    });
   }
 
   private async startAlgsAnalysis(msg: Message, force = false) {
-    return await this.scheduleJob(
-      msg.channel.id,
-      "ALGS",
-      async () => await this.processBulkDelete(msg.channel as TextChannel),
-      BULK_DELETE_TIMEOUT_DELAY,
+    return this.algsTimeoutCache.set(msg.channel.id, {
+      callback: async () =>
+        await this.processBulkDelete(msg.channel as TextChannel),
+      delay: BULK_DELETE_TIMEOUT_DELAY,
       force,
-    );
+    });
   }
 
   //============PROCESSORS==========
@@ -123,7 +144,7 @@ export class AutoAnalyzeAutomodService {
       messages: messages as AutomodMessage[],
     });
     if (analytics && analytics.success) {
-      await this.automodLogService.sendGuildLog(analytics.data, channel.guild!);
+      await this.automodLogService.sendGuildLog(analytics.data, channel);
     }
   }
 
@@ -144,7 +165,7 @@ export class AutoAnalyzeAutomodService {
     }
   }
 
-  //===========PUSHERS=========
+  //===========CACHE ACTIONS=========
   private pushAiCacheMessage(msg: Message) {
     this.aiMessageCache.set(
       this.generateCacheKey(msg.channel.id, msg.id),
@@ -153,7 +174,7 @@ export class AutoAnalyzeAutomodService {
         content: msg.content!,
         createdAt: msg.createdAt,
       },
-      Infinity,
+      Infinity
     );
   }
 
@@ -161,51 +182,39 @@ export class AutoAnalyzeAutomodService {
     this.algsMessageCache.set(
       this.generateCacheKey(msg.channel.id, msg.id),
       msg,
-      Infinity,
+      Infinity
     );
   }
 
-  //============UTILITARY===========
-  private async scheduleJob(
-    key: string,
-    type: CacheType,
-    callback: () => void | Promise<void>,
-    delay: number,
-    forceExisted = false,
-  ) {
-    const cache = this.getTimeoutCacheByType(type);
-    const existed = cache.get(key);
+  private removeAICacheMessage(msg: PartialMessage) {
+    this.aiMessageCache.delete(this.generateCacheKey(msg.channel.id, msg.id));
+  }
 
-    if (existed) {
-      if (forceExisted) {
-        clearTimeout(existed);
-        cache.delete(key);
-        await callback();
-      }
-      return;
-    }
-
-    cache.set(
-      key,
-      setTimeout(async () => {
-        await callback();
-        cache.delete(key);
-      }, delay),
-      delay,
-    );
+  private removeAlgsCacheMessage(msg: PartialMessage) {
+    this.algsMessageCache.delete(this.generateCacheKey(msg.channel.id, msg.id));
   }
 
   private generateCacheKey(
     channelId: Snowflake,
-    messageId: Snowflake,
+    messageId: Snowflake
   ): CacheKey {
     return `${channelId}-${messageId}`;
   }
 
+  private getMessageCacheByType(type: CacheType) {
+    switch (type) {
+      case "AI":
+        return this.aiMessageCache;
+      default:
+        return this.algsMessageCache;
+    }
+  }
+
+  //============UTILITARY===========
   private getMessages<T = AutomodMessage>(
     channelId: Snowflake,
     type: CacheType,
-    options?: GetMessagesOptions,
+    options?: GetMessagesOptions
   ): Array<T> {
     const cache = this.getMessageCacheByType(type);
     const raw = cache.raw();
@@ -231,13 +240,5 @@ export class AutoAnalyzeAutomodService {
     }
 
     return values.filter(Boolean).map((item) => item.value);
-  }
-
-  private getMessageCacheByType(type: CacheType) {
-    return type === "AI" ? this.aiMessageCache : this.algsMessageCache;
-  }
-
-  private getTimeoutCacheByType(type: CacheType) {
-    return type === "AI" ? this.aiTimeoutCache : this.algsTimeoutCache;
   }
 }

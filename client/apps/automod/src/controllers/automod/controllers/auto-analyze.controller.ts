@@ -9,7 +9,7 @@ import { AutoAnalyzeAutomodService } from "../services/auto-analyze.service.js";
 export class AutoAnalyzeController {
   constructor(
     @inject(AutoAnalyzeAutomodService)
-    private autoAnalyzeService: AutoAnalyzeAutomodService,
+    private autoAnalyzeService: AutoAnalyzeAutomodService
   ) {}
 
   @On({ event: "messageCreate" })
@@ -20,5 +20,10 @@ export class AutoAnalyzeController {
   @On({ event: "messageUpdate" })
   async onMessageUpdate([, newMsg]: ArgsOf<"messageUpdate">) {
     return this.autoAnalyzeService.handleMessage(newMsg, Events.MessageUpdate);
+  }
+
+  @On({ event: "messageDelete" })
+  async onMessageDelete([msg]: ArgsOf<"messageDelete">) {
+    return this.autoAnalyzeService.handleMessage(msg, Events.MessageDelete);
   }
 }
