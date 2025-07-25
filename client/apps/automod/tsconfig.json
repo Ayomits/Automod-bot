@@ -10,10 +10,10 @@
     "outDir": "dist",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"],
       "@automod/types/*": ["../../packages/types/dist/index.d.ts"],
       "@automod/config/*": ["../../packages/api/dist/index.d.ts"],
-      "@automod/api/*": ["../../packages/config/dist/index.d.ts"]
+      "@automod/api/*": ["../../packages/config/dist/index.d.ts"],
+      "#*": ["./src/*"]
     },
     "esModuleInterop": true,
     "strict": true

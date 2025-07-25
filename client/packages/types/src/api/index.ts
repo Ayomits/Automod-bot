@@ -1,1 +1,1 @@
-export * from "./automod";
+export * from "./automod/index.js";

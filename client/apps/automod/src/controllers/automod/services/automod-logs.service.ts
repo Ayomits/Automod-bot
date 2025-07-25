@@ -8,7 +8,7 @@ import type { Guild, Message, SendableChannels, User } from "discord.js";
 import { EmbedBuilder } from "discord.js";
 import { injectable } from "tsyringe";
 
-import { TempConfig } from "@/const/temp-config.js";
+import { TempConfig } from "#const/temp-config.js";
 
 import { AutomodLogMessages } from "../../../messages/automod.messages.js";
 

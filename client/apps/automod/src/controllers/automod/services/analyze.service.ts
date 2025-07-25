@@ -1,3 +1,4 @@
+import { AutomodApi } from "@automod/api";
 import type { AutomodMessage } from "@automod/types";
 import type {
   CommandInteraction,
@@ -15,11 +16,10 @@ import {
 } from "discord.js";
 import { inject, injectable } from "tsyringe";
 
-import { AutomodApi } from "@/api/automod/automod.api.js";
-import { AutomodAnalyzeExplanaition } from "@/api/automod/automod-analyze.js";
-import { ApiError } from "@/errors/api.error.js";
-import { EmbedBuilder } from "@/lib/embed/embed.builder.js";
-import { UsersUtility } from "@/lib/embed/users.utility.js";
+import { ApiError } from "#errors/api.error.js";
+import { EmbedBuilder } from "#lib/embed/embed.builder.js";
+import { UsersUtility } from "#lib/embed/users.utility.js";
+import { AutomodAnalyzeExplanaition } from "#lib/explaination/index.js";
 
 import {
   ContextCommandAnalyzeLastUserMessages,

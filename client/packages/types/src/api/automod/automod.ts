@@ -1,4 +1,4 @@
-import type { LiteralEnum } from "@/utlity";
+import type { LiteralEnum } from "#utility/index.js";
 import type { Snowflake } from "discord.js";
 
 export interface AutomodMessage {
