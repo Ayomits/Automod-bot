@@ -1,4 +1,4 @@
-import type { ObjectKeys } from "@/utlity";
+import type { ObjectKeys } from "#utility/index.js";
 
 export interface EnvConfig {
   API_URL: string;
