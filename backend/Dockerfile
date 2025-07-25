@@ -14,4 +14,6 @@ COPY ./docker/runit/backend/dev.run /etc/service/app/run
 COPY ./docker/runit/backend/dev.sh /runit/dev.sh
 RUN chmod +x /etc/service/app/run /runit/dev.sh
 
+COPY ./backend /app/
+
 CMD ["runsvdir", "/etc/service"]

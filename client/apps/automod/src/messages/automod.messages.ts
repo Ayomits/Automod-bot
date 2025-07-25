@@ -1,4 +1,5 @@
-import { type AutomodMatch, AutomodRule } from "@automod/types";
+import type { AutomodMatch } from "@automod/types";
+import { AutomodRule } from "@automod/types";
 import { bold, codeBlock, userMention } from "discord.js";
 
 export const AutomodWarningMessageExplanaition = {

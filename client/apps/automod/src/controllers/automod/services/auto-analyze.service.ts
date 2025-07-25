@@ -1,10 +1,10 @@
+import { AutomodApi } from "@automod/api";
 import type { AutomodMessage } from "@automod/types";
 import type { Message, Snowflake, TextChannel } from "discord.js";
 import { Events } from "discord.js";
 import { inject, injectable } from "tsyringe";
 
-import { AutomodApi } from "@/api/automod/automod.api.js";
-import { LocalCache } from "@/cache/local.cache.js";
+import { LocalCache } from "#cache/local.cache.js";
 
 import { AutomodLogService } from "./automod-logs.service.js";
 

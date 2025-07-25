@@ -1,2 +1,2 @@
-export * from "./rest";
-export * from "./automod/api";
+export * from "./rest.js";
+export * from "./automod/api.js";
