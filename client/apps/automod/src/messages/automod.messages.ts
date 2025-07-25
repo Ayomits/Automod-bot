@@ -36,6 +36,11 @@ export const AutomodLogMessages = {
           name: "Контент",
           value: codeBlock(match.content),
         },
+        {
+          name: "Санкция",
+          value: codeBlock(`Нет`),
+          inline: true,
+        },
       ],
     },
     [AutomodRule.Toxicity]: {
@@ -47,6 +52,11 @@ export const AutomodLogMessages = {
           name: "Контент",
           value: codeBlock(match.content),
         },
+        {
+          name: "Санкция",
+          value: codeBlock(`Нет`),
+          inline: true,
+        },
       ],
     },
     [AutomodRule.MessageMaxLength]: {
@@ -57,6 +67,11 @@ export const AutomodLogMessages = {
         {
           name: "Контент",
           value: codeBlock(match.content),
+        },
+        {
+          name: "Санкция",
+          value: codeBlock(`Нет`),
+          inline: true,
         },
       ],
     },
