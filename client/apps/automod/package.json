@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@automod/bot",
+  "name": "@automod/automod",
   "description": "Discord.js implementation",
   "version": "1.0.0",
   "main": "./dist/main.js",
