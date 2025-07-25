@@ -9,7 +9,7 @@ import { AutoAnalyzeAutomodService } from "../services/auto-analyze.service.js";
 export class AutoAnalyzeController {
   constructor(
     @inject(AutoAnalyzeAutomodService)
-    private autoAnalyzeService: AutoAnalyzeAutomodService
+    private autoAnalyzeService: AutoAnalyzeAutomodService,
   ) {}
 
   @On({ event: "messageCreate" })

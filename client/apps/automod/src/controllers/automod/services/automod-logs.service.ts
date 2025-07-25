@@ -31,7 +31,7 @@ export class AutomodLogService {
   constructor(
     @inject(ScheduleManager) private logTimeoutCache: ScheduleManager,
     @inject(LocalCache)
-    private logEmbedsCache: LocalCache<Snowflake, APIEmbed[]>
+    private logEmbedsCache: LocalCache<Snowflake, APIEmbed[]>,
   ) {}
 
   public async sendLogs(response: AutomodResponse, msg: Message) {
@@ -47,14 +47,14 @@ export class AutomodLogService {
   public async sendGuildLog(response: AutomodResponse, channel: GuildChannel) {
     const resolvedMatches = this.resolveMatches(
       channel.guild,
-      response.matches
+      response.matches,
     );
     const existedTimeout = this.logTimeoutCache.get(channel.id);
     const existedEmbeds = this.logEmbedsCache.get(channel.id) ?? [];
     this.logEmbedsCache.set(
       channel.id,
       [...existedEmbeds, ...resolvedMatches.map((em) => em.toJSON())],
-      Infinity
+      Infinity,
     );
     if (existedTimeout) {
       return;
@@ -145,7 +145,7 @@ export class AutomodLogService {
   }
 
   private getLogMessagesByType(
-    type: ObjectKeys<(typeof AutomodLogMessages)["logging"]>
+    type: ObjectKeys<(typeof AutomodLogMessages)["logging"]>,
   ) {
     return AutomodLogMessages.logging?.[type];
   }
