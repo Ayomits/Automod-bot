@@ -27,7 +27,7 @@ export class ScheduleManager {
         key,
         setTimeout(() => options.callback(), options.delay),
         options.delay,
-        (_, value) => clearTimeout(value)
+        (_, value) => clearTimeout(value),
       );
     if (options.force && existed) {
       void options.callback();
@@ -47,7 +47,7 @@ export class ScheduleManager {
 
   public stopAll() {
     return Array.from(this.schedules.values()).forEach((item) =>
-      clearTimeout(item.data)
+      clearTimeout(item.data),
     );
   }
 }

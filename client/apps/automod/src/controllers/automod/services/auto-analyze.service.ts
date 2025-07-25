@@ -41,7 +41,7 @@ export class AutoAnalyzeAutomodService {
     private algsTimeoutCache: ScheduleManager,
     @inject(LocalCache)
     private aiMessageCache: LocalCache<CacheKey, AutomodMessage>,
-    @inject(LocalCache) private algsMessageCache: LocalCache<CacheKey, Message>
+    @inject(LocalCache) private algsMessageCache: LocalCache<CacheKey, Message>,
   ) {}
 
   // ==========HANDLERS==========
@@ -50,7 +50,7 @@ export class AutoAnalyzeAutomodService {
     eventType:
       | Events.MessageCreate
       | Events.MessageUpdate
-      | Events.MessageDelete = Events.MessageCreate
+      | Events.MessageDelete = Events.MessageCreate,
   ) {
     if (msg.author!.bot || !msg.guild || !msg.content) {
       return;
@@ -67,7 +67,7 @@ export class AutoAnalyzeAutomodService {
     eventType:
       | Events.MessageCreate
       | Events.MessageUpdate
-      | Events.MessageDelete
+      | Events.MessageDelete,
   ) {
     if (msg.partial || eventType === Events.MessageDelete) {
       return this.removeAICacheMessage(msg as PartialMessage);
@@ -78,7 +78,7 @@ export class AutoAnalyzeAutomodService {
     });
     return this.startAiAnalysis(
       msg,
-      messages.length === AI_MESSAGE_CACHE_KEYS_LIMIT
+      messages.length === AI_MESSAGE_CACHE_KEYS_LIMIT,
     );
   }
 
@@ -87,7 +87,7 @@ export class AutoAnalyzeAutomodService {
     eventType:
       | Events.MessageCreate
       | Events.MessageUpdate
-      | Events.MessageDelete
+      | Events.MessageDelete,
   ) {
     if (msg.partial || eventType === Events.MessageDelete) {
       return this.removeAlgsCacheMessage(msg as PartialMessage);
@@ -109,7 +109,7 @@ export class AutoAnalyzeAutomodService {
       }
       this.automodLogService.sendGuildLog(
         result.data,
-        msg.channel as GuildChannel
+        msg.channel as GuildChannel,
       );
     }
   }
@@ -174,7 +174,7 @@ export class AutoAnalyzeAutomodService {
         content: msg.content!,
         createdAt: msg.createdAt,
       },
-      Infinity
+      Infinity,
     );
   }
 
@@ -182,7 +182,7 @@ export class AutoAnalyzeAutomodService {
     this.algsMessageCache.set(
       this.generateCacheKey(msg.channel.id, msg.id),
       msg,
-      Infinity
+      Infinity,
     );
   }
 
@@ -196,7 +196,7 @@ export class AutoAnalyzeAutomodService {
 
   private generateCacheKey(
     channelId: Snowflake,
-    messageId: Snowflake
+    messageId: Snowflake,
   ): CacheKey {
     return `${channelId}-${messageId}`;
   }
@@ -214,7 +214,7 @@ export class AutoAnalyzeAutomodService {
   private getMessages<T = AutomodMessage>(
     channelId: Snowflake,
     type: CacheType,
-    options?: GetMessagesOptions
+    options?: GetMessagesOptions,
   ): Array<T> {
     const cache = this.getMessageCacheByType(type);
     const raw = cache.raw();
