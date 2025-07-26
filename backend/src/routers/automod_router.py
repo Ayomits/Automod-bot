@@ -2,7 +2,7 @@ from fastapi import APIRouter, Body
 from schemas import (
     AutomodClassicRequestSchema,
     AutomodMatch,
-    AutomodMessage,
+    AutomodEntry,
     AutomodRequestSchema,
     AutomodResponseSchema,
 )
@@ -25,8 +25,8 @@ instance = AutomodService()
 }, name="Run moderation pipeline", tags=["automod"])
 async def automod_classic(schema: AutomodClassicRequestSchema = Body(
     examples={
-        "default": AutomodRequestSchema(messages=[
-            AutomodMessage(content="HELLO WORLD", user_id="snowflake")
+        "default": AutomodRequestSchema(entries=[
+            AutomodEntry(content="HELLO WORLD", user_id="snowflake")
         ])
     }
 )):
