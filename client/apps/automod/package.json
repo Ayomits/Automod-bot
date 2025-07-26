@@ -42,7 +42,6 @@
   },
   "devDependencies": {
     "@automod/types": "workspace:^",
-    "@ef-carbon/tspm": "^2.2.5",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.30.1",
     "@ts-fetcher/types": "^1.4.1",
@@ -56,8 +55,6 @@
     "globals": "^16.3.0",
     "nodemon": "^3.1.10",
     "prettier": "^3.6.2",
-    "tsc-alias": "^1.8.16",
-    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.3"
   },
   "files": [

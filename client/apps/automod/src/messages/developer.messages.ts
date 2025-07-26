@@ -1,6 +1,7 @@
 import { codeBlock, quote } from "discord.js";
 
 export const PingMessages = {
+  title: "Проверка задержки",
   ws: {
     name: quote("Задержка вебсокета"),
     value: (latency: number) => `${codeBlock(`${Math.max(latency, 0)} ms`)}`,
