@@ -68,7 +68,6 @@ export class AutomodLogService {
   private async sendScheduledLogs(channel: GuildChannel) {
     const logChannel = await this.fetchLogChannel(channel.guild);
     if (!logChannel) {
-      console.log("no log channel");
       return;
     }
 
@@ -76,7 +75,6 @@ export class AutomodLogService {
     this.logEmbedsCache.delete(channel.id);
 
     if (rawEmbeds.length === 0) {
-      console.log("empty raw");
       return;
     }
 

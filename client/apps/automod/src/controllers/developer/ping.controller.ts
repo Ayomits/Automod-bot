@@ -16,19 +16,31 @@ export class PingController {
 
   @Slash({
     name: "ping",
-    description: "Проверка задержки вебсокета и сообщений",
+    nameLocalizations: {
+      ru: "пинг",
+    },
+    description: "Check websocket and message latency",
+    descriptionLocalizations: {
+      ru: "Проверка задержки вебсокета и сообщений",
+    },
   })
   @Guard(DevOnly)
   async ping(
     @SlashChoice(...Object.values(PingType))
     @SlashOption({
       name: "type",
+      nameLocalizations: {
+        ru: "тип",
+      },
       description: "Тип задержки",
+      descriptionLocalizations: {
+        ru: "Тип задержки",
+      },
       required: false,
       type: ApplicationCommandOptionType.String,
     })
     type: PingType = PingType.All,
-    interaction: CommandInteraction,
+    interaction: CommandInteraction
   ) {
     return this.pingService.execute(interaction, type);
   }

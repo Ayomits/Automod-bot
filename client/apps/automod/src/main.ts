@@ -32,9 +32,10 @@ async function bootstrap() {
       if (__retries < 3) {
         try {
           await client.initApplicationCommands();
-        } catch {
+        } catch (err) {
           await client.clearApplicationCommands();
           await initCommands(__retries + 1);
+          console.error(err);
         }
       }
     }
