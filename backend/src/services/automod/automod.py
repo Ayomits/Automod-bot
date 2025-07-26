@@ -3,11 +3,13 @@ from .max_message_length import MaxMessageLengthAutomodSercice
 from .rules import AutomodRules
 from .toxicity import ToxicityService
 from pydantic import BaseModel
-from schemas import AutomodRequestSchema, AutomodResponseSchema, AutomodMatch, AutomodMessage
+from schemas import AutomodRequestSchema, AutomodResponseSchema, AutomodMatch, AutomodEntry
+
 
 class AutomodRule(BaseModel):
     matched: bool
     rules: list[str]
+
 
 class AutomodService:
 
@@ -18,9 +20,10 @@ class AutomodService:
     __automod_rules = [rule.value for rule in AutomodRules]
 
     def pipeline(self, schema: AutomodRequestSchema) -> AutomodResponseSchema:
-        messages = schema.messages
+        messages = schema.entries
         matches = []
-        rules_to_check = schema.rules if len(schema.rules) >= 1 else self.__automod_rules
+        rules_to_check = schema.rules if len(
+            schema.rules) >= 1 else self.__automod_rules
         for message in messages:
             if message.content:
                 rules = []
@@ -29,10 +32,11 @@ class AutomodService:
                     if runned:
                         rules.append(rule)
                 if len(rules) > 0:
-                    matches.append(AutomodMatch(user_id=message.user_id, content=message.content, rules=rules))
+                    matches.append(AutomodMatch(
+                        user_id=message.user_id, content=message.content, rules=rules))
         return AutomodResponseSchema(matches=matches)
 
-    def run_rule(self, rule: AutomodRules, message: AutomodMessage):
+    def run_rule(self, rule: AutomodRules, message: AutomodEntry):
         if rule == AutomodRules.CAPS.value:
             return self.process_rule(func=self.__run_full_caps_rule, content=message.content, rule=rule)
         elif rule == AutomodRules.CAPS_MIXED.value:
