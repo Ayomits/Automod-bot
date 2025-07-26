@@ -21,7 +21,7 @@ export const AutomodRule = {
 export type AutomodRule = LiteralEnum<typeof AutomodRule>;
 
 export interface AutomodRequest {
-  messages: AutomodMessage[];
+  entries: AutomodMessage[];
   rules: AutomodRule[];
 }
 
