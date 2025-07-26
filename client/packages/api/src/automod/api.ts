@@ -19,12 +19,12 @@ export class AutomodApi {
         ? { ...defaultOptions, ...payload }
         : defaultOptions;
     return await this.automodSelectedRules(payload as AutomodRequest).catch(
-      console.error
+      console.error,
     );
   }
 
   public async automodAlghorthimicRules(
-    payload: Omit<AutomodRequest, "rules">
+    payload: Omit<AutomodRequest, "rules">,
   ) {
     return await this.automodSelectedRules({
       ...payload,
@@ -40,7 +40,7 @@ export class AutomodApi {
   }
 
   private async automodSelectedRules(
-    payload: AutomodRequest
+    payload: AutomodRequest,
   ): Promise<ApiResponse<AutomodResponse, AutomodRequest, "POST">> {
     // @ts-expect-error TS2742
     return await rest.post<AutomodResponse, AutomodRequest>("/automod", {
