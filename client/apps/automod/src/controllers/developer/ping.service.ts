@@ -20,7 +20,7 @@ export class PingService {
     await interaction.deferReply({ ephemeral: true });
 
     const embed = new EmbedBuilder()
-      .setTitle("Проверка задержки")
+      .setTitle(PingMessages.title)
       .setThumbnail(UsersUtility.getAvatar(interaction.user))
       .setTimestamp(Date.now())
       .setFooter({
@@ -41,7 +41,7 @@ export class PingService {
       fields.push({
         name: PingMessages.message.name,
         value: PingMessages.message.value(
-          Date.now() - interaction.createdTimestamp,
+          Date.now() - interaction.createdTimestamp
         ),
         inline: true,
       });
