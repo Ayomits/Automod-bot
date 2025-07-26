@@ -40,7 +40,7 @@ export class PingController {
       type: ApplicationCommandOptionType.String,
     })
     type: PingType = PingType.All,
-    interaction: CommandInteraction
+    interaction: CommandInteraction,
   ) {
     return this.pingService.execute(interaction, type);
   }
