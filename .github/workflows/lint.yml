@@ -25,20 +25,16 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          cd client
           pnpm install --frozen-lockfile
 
       - name: Check prettier
         run: |
-         cd client
-         pnpm run format:check
+          pnpm run format:check
 
       - name: Check lint
         run: |
-          cd client
           pnpm run lint:check
 
       - name: Run build
         run: |
-          cd client
           pnpm run build
