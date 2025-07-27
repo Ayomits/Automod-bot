@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, Depends
 from schemas import (
     AutomodClassicRequestSchema,
     AutomodMatch,
@@ -7,8 +7,9 @@ from schemas import (
     AutomodResponseSchema,
 )
 from services.automod import AutomodService
+from guards import internal_token_guard
 
-automod_router = APIRouter(prefix='/automod')
+automod_router = APIRouter(prefix='/automod', dependencies=[Depends(internal_token_guard)])
 
 instance = AutomodService()
 

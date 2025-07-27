@@ -22,6 +22,9 @@
       "dependsOn": ["^lint:fix"],
       "outputLogs": "errors-only"
     },
-    "dev": {}
+    "start:backend:dev": {},
+    "start:client:dev": {},
+    "start:backend:prod": {},
+    "start:client:prod": {}
   }
 }

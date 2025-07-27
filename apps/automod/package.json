@@ -20,8 +20,8 @@
     "lint:fix": "eslint src --ext .ts --fix",
     "build": "tsc -b",
     "pipeline": "pnpm run format:fix && pnpm run lint:fix && pnpm run build",
-    "dev": "nodemon",
-    "prod": "node dist/main.js"
+    "start:client:dev": "nodemon",
+    "start:client:prod": "node dist/main.js"
   },
   "repository": {
     "url": "https://github.com/Ayomits/ts-fetch"
@@ -42,11 +42,10 @@
   },
   "devDependencies": {
     "@automod/types": "workspace:^",
+    "@ts-fetcher/types": "^1.4.1",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.30.1",
-    "@ts-fetcher/types": "^1.4.1",
     "@types/node": "^24.0.12",
-    "@types/node-schedule": "^2.1.8",
     "@typescript-eslint/eslint-plugin": "^8.36.0",
     "@typescript-eslint/parser": "^8.36.0",
     "esbuild-plugin-version-injector": "^1.2.1",

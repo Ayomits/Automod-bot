@@ -8,4 +8,3 @@ class AutomodRules(Enum):
     LINKS = "LINKS"
     LANGUAGE = "LANGUAGE"
     BANWORD = "BANWORD"
-    TOXICITY = "TOXICITY"

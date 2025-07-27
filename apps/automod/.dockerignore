@@ -3,3 +3,4 @@
 **/.turbo
 **/.env
 **/tsconfig.tsbuildinfo
+**/py-backend

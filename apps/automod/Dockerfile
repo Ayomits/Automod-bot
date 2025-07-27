@@ -11,6 +11,6 @@ COPY ./docker/runit/client/dev.run /etc/service/app/run
 COPY ./docker/runit/client/dev.sh /runit/dev.sh
 RUN chmod +x /etc/service/app/run /runit/dev.sh
 
-COPY ./client ./
+COPY ./ ./
 
 CMD ["runsvdir", "/etc/service"]
