@@ -2,9 +2,8 @@ name: Lint checks
 
 on:
   push:
-    paths:
-      - client/**
-      - .github/workflows/client.yml
+    branches-ignore:
+      - main
 
 jobs:
   build_lint_format:
